@@ -2,7 +2,8 @@
 name: store-signal-delivery
 description: Deliver StoreSignal issues with evidence and dual-runtime tests.
 version: 0.1.0
-license: pending
+license: pending # effective grant awaits rights verification and merge
+license_choice: AGPL-3.0-only
 metadata:
   hermes:
     tags: [store-signal, evidence, browser-extension, cloudflare]
@@ -10,7 +11,7 @@ metadata:
 
 # StoreSignal delivery
 
-Use when a delegated worker implements or reviews a StoreSignal GitHub issue. This is repo-local guidance; load explicitly with `AGENTS.md` if the runtime does not discover repo skills. The repository is public but its software license is undecided.
+Use when a delegated worker implements or reviews a StoreSignal GitHub issue. This is repo-local guidance; load explicitly with `AGENTS.md` if the runtime does not discover repo skills. Keith recorded AGPL-3.0-only for Tevpro-owned project code, but the license PR is draft/unmerged and ownership/authority has not been verified; public visibility is not a grant.
 
 ## Procedure
 
@@ -26,7 +27,7 @@ Use when a delegated worker implements or reviews a StoreSignal GitHub issue. Th
 - Similar business names and repeated Reddit allegations are not corroboration.
 - A D1 read then write is not an atomic global cooldown. Test concurrent requests.
 - BYOK analysis is private; only evidence-validated managed AI may change shared public assessments.
-- A public repo with no license is not yet an open-source grant. Do not assume Apache or AGPL is selected.
+- The recorded choice is AGPL-3.0-only, not Apache-2.0 or automatic later-version permission. A public repo or draft license PR is not an effective grant on `main`; verify rights, merged status and dependency provenance before asserting reuse rights.
 
 ## Verification
 

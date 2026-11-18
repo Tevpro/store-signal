@@ -37,4 +37,4 @@ npm audit --omit=dev
 
 ## Status and licensing
 
-This repository is public for architecture review, but a software license has **not** been selected. Public visibility does not grant reuse rights. Selecting and adding an OSI-approved license is an explicit pre-release issue. No third-party review corpus, credentials, screenshots, or scraped content belongs in this repository.
+Keith has recorded the choice of **AGPL-3.0-only** for Tevpro-owned project code, with DCO 1.1 sign-offs and a separate trademark policy ([decision record](docs/decisions.md); [license text](LICENSE)). The licensing PR is still draft and unmerged: ownership/authority and third-party provenance remain unverified, and the proposed grant is not effective on `main` merely because the repository or draft PR is public. Verify the actual merged tree and rights before relying on a license grant. No third-party review corpus, credentials, screenshots, or scraped content belongs in this repository.
