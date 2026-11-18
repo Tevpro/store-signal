@@ -1,0 +1,22 @@
+{
+  "identity": [
+    {"schemaVersion":1,"storeId":"domain:example.com","origin":"https://www.example.com","registrableDomain":"example.com","matchExplanation":"Independent registrable domain"},
+    {"schemaVersion":1,"storeId":"tenant:shop-a.platform.example","origin":"https://shop-a.platform.example","registrableDomain":"platform.example","tenantKey":"shop-a","matchExplanation":"Reviewed hosted tenant rule: platform.example"}
+  ],
+  "evidence": [
+    {"schemaVersion":1,"id":"ev-1","storeId":"domain:example.com","kind":"business_profile","sourceUrl":"https://maps.example.com/place/1","provider":"synthetic-places","retrievedAt":"2026-01-01T00:00:00Z","observedAt":"2025-12-31T00:00:00Z","subjectMatch":{"status":"exact","rationale":"Synthetic exact domain link"},"claim":"Synthetic profile exists","limitations":[],"lineage":["original-1"]},
+    {"schemaVersion":1,"id":"ev-2","storeId":"domain:example.com","kind":"indexed_discussion","sourceUrl":"https://forums.example.com/thread/2","provider":"synthetic-search","retrievedAt":"2026-01-01T00:00:00Z","subjectMatch":{"status":"ambiguous","rationale":"Name only; domain unconfirmed"},"claim":"Synthetic indexed result","limitations":["Identity unverified"],"lineage":["original-2"]}
+  ],
+  "coverage": [
+    {"schemaVersion":1,"connector":"synthetic-search","status":"checked","checkedAt":"2026-01-01T00:00:00Z"},
+    {"schemaVersion":1,"connector":"synthetic-places","status":"no_match","checkedAt":"2026-01-01T00:00:00Z"},
+    {"schemaVersion":1,"connector":"synthetic-search","status":"unavailable","checkedAt":"2026-01-01T00:00:00Z","limitation":"Not configured"},
+    {"schemaVersion":1,"connector":"synthetic-places","status":"failed","checkedAt":"2026-01-01T00:00:00Z","errorCode":"UPSTREAM_TIMEOUT"}
+  ],
+  "assessment": [
+    {"schemaVersion":1,"id":"as-limited","storeId":"domain:example.com","status":"limited","concern":"insufficient","reasonCodes":["NON_AI"],"confidence":"low","evidenceIds":["ev-1"],"coverage":[{"schemaVersion":1,"connector":"synthetic-search","status":"checked","checkedAt":"2026-01-01T00:00:00Z"}],"limitations":["Non-AI output"],"checkedAt":"2026-01-01T00:00:00Z","expiresAt":"2026-01-08T00:00:00Z","aiMode":"none","publicationStatus":"draft"},
+    {"schemaVersion":1,"id":"as-no-match","storeId":"domain:example.com","status":"no_match","concern":"insufficient","reasonCodes":["NO_MATCH"],"confidence":"insufficient","evidenceIds":[],"coverage":[{"schemaVersion":1,"connector":"synthetic-search","status":"no_match","checkedAt":"2026-01-01T00:00:00Z"}],"limitations":[],"checkedAt":"2026-01-01T00:00:00Z","expiresAt":"2026-01-08T00:00:00Z","aiMode":"none","publicationStatus":"draft"},
+    {"schemaVersion":1,"id":"as-failed","storeId":"domain:example.com","status":"failed","concern":"insufficient","reasonCodes":["UPSTREAM_FAILURE"],"confidence":"insufficient","evidenceIds":[],"coverage":[{"schemaVersion":1,"connector":"synthetic-places","status":"failed","checkedAt":"2026-01-01T00:00:00Z","errorCode":"UPSTREAM_TIMEOUT"}],"limitations":["No usable source"],"checkedAt":"2026-01-01T00:00:00Z","expiresAt":"2026-01-08T00:00:00Z","aiMode":"none","publicationStatus":"held"},
+    {"schemaVersion":1,"id":"as-complete","storeId":"domain:example.com","status":"complete","concern":"caution","reasonCodes":["SYNTHETIC"],"confidence":"medium","evidenceIds":["ev-1"],"coverage":[{"schemaVersion":1,"connector":"synthetic-search","status":"checked","checkedAt":"2026-01-01T00:00:00Z"}],"limitations":[],"checkedAt":"2026-01-01T00:00:00Z","expiresAt":"2026-01-08T00:00:00Z","aiMode":"managed","publicationStatus":"draft"}
+  ]
+}

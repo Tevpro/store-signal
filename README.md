@@ -34,7 +34,13 @@ npm run smoke:worker
 npm audit --omit=dev
 ```
 
-`smoke:worker` runs `wrangler d1 migrations apply --local` in a temporary directory, starts `wrangler dev --local` bound to loopback, checks `/smoke` over HTTP and cleans up. `smoke:node` exercises native SQLite in memory. `build` emits Node JS and bundles the Worker with Wrangler `--dry-run` only; it does **not** deploy. These fixtures prove only local database/runtime wiring and schema parity, not store identity, source verification, job admission, public ratings or launch readiness. The Worker config contains a synthetic all-zero local D1 ID; never use it for production deployment. Provider rights, credentials and terms remain gated by G02/G03.
+`smoke:worker` runs `wrangler d1 migrations apply --local` in a temporary directory, starts `wrangler dev --local` bound to loopback, checks `/smoke` over HTTP and cleans up. `smoke:node` exercises native SQLite in memory. `build` emits Node JS and bundles the Worker with Wrangler `--dry-run` only; it does **not** deploy. These fixtures prove local database/runtime wiring and /v1 contract JSON parity, not source verification, job admission, public ratings or launch readiness. The Worker config contains a synthetic all-zero local D1 ID; never use it for production deployment. Provider rights, credentials and terms remain gated by G02/G03.
+
+## /v1 shared contracts (F02 local development)
+
+`packages/contracts/src/v1.ts` exports runtime-validated `StoreIdentity`, `Evidence`, `Coverage`, and `Assessment` via the package index. `parseV1(kind, unknown)` and `serializeV1(kind, unknown)` reject missing fields, invalid enums/dates, contradictory outcomes and unknown schema versions while retaining additive fields on a v1 JSON roundtrip. `parseAssessmentWithEvidence` checks cited IDs against known same-store evidence. No connector or rating engine is implemented. `tests/fixtures/v1-records.json` is synthetic and exercised through native SQLite JSON1 and Wrangler-local D1 JSON SQL; `/contracts-smoke` is a fixture-only Worker route, not a product API.
+
+`normalizeStoreIdentity` uses the pinned PSL implementation (`tldts`) and a reviewed hosted-tenant rule registry (initially `myshopify.com`; `.example` rules exist only for synthetic tests). Trusted server code may supply additional reviewed rules explicitly; never derive them from shopper input. It rejects credentials, non-web schemes, IP literals, non-ICANN suffixes except reserved `.example` test hosts, and non-default ports; it does **not** resolve DNS, follow redirects or prove a remote site is safe. Fetch adapters must validate all resolved and redirected addresses independently before egress. Origin preserves HTTP versus HTTPS, while identity keys do not imply transport safety. Any public High result still needs the independent evidence/publication gate; schema-valid records are not authorization to publish. BYOK records remain private.
 
 ## Status and licensing
 

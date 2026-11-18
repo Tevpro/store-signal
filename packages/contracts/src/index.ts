@@ -1,3 +1,5 @@
+export * from './v1.ts';
+
 export interface StoreFixture {
   readonly id: string;
   readonly origin: string;

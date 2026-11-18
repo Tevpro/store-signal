@@ -41,7 +41,11 @@ try {
   if (response.status !== 200) throw new Error(`Worker HTTP ${response.status}: ${await response.text()}\n${output}`);
   const body: unknown = await response.json();
   assert.deepEqual(body, fixtures);
-  console.log(`Wrangler-local Worker/D1 smoke passed: HTTP 200, ${fixtures.length} shared fixture rows`);
+  const contractResponse = await fetch(`http://127.0.0.1:${port}/contracts-smoke`);
+  assert.equal(contractResponse.status, 200);
+  const golden: unknown = JSON.parse(readFileSync(new URL('./fixtures/v1-records.json', import.meta.url), 'utf8'));
+  assert.deepEqual(await contractResponse.json(), golden);
+  console.log(`Wrangler-local Worker/D1 smoke passed: HTTP 200, ${fixtures.length} shared fixture rows; /v1 contracts roundtripped through D1 JSON SQL`);
 } finally {
   if (wrangler && wrangler.exitCode === null && wrangler.signalCode === null && !spawnError) {
     wrangler.kill('SIGTERM');
