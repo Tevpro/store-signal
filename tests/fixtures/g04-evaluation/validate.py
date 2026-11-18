@@ -33,7 +33,7 @@ def validate(data):
         assert set(case) == {
             "id", "storeOrigin", "referenceLabel", "categories", "edgeTags",
             "evidence", "expectedConcern", "highGate", "rationale",
-        }, case
+        } | ({"targetInquiry"} if case["referenceLabel"] == "not_risky" else set()), case
         assert case["id"] not in ids
         ids.add(case["id"])
         origin = urlsplit(case["storeOrigin"])
@@ -62,6 +62,17 @@ def validate(data):
             evidence_ids.add(item["id"])
             assert all(isinstance(item[key], str) and item[key] for key in item)
             assert item["source"].startswith("synthetic_")
+        if case["referenceLabel"] == "not_risky":
+            inquiry = case["targetInquiry"]
+            assert set(inquiry) == {"evidenceId", "window", "result"}
+            assert isinstance(inquiry["window"], str) and inquiry["window"].strip()
+            assert inquiry["result"] == "no_qualifying_findings"
+            assert any(
+                item["id"] == inquiry["evidenceId"]
+                and item["source"] == "synthetic_independent_inquiry"
+                and item["subject"] == "exact_domain"
+                for item in case["evidence"]
+            ), case["id"]
         if "reposts" in case["edgeTags"]:
             assert len({item["lineage"] for item in case["evidence"]}) == 1
             assert len(case["evidence"]) >= 2

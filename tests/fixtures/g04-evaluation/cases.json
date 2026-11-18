@@ -63,10 +63,13 @@
       "referenceLabel": "not_risky",
       "categories": [],
       "edgeTags": ["benign_new", "no_match"],
-      "evidence": [],
+      "evidence": [
+        {"id": "new-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-new-check", "claim": "Invented independent target-store order and customer follow-up within the first 60 days found fulfillment as stated and no qualifying issue in the checked records; not a safety guarantee."}
+      ],
+      "targetInquiry": {"evidenceId": "new-inquiry", "window": "first 60 days of operation at the frozen snapshot", "result": "no_qualifying_findings"},
       "expectedConcern": "caution",
       "highGate": "not_proposed",
-      "rationale": "Healthy connectors return no trusted reviews; limited independent track record, never ungrounded High or assured Low."
+      "rationale": "Independent bounded target-store inquiry supports a not_risky reference label for the observed window; healthy connectors return no trusted reviews, so public concern remains Caution for limited independent track record, never assured Low."
     },
     {
       "id": "benign-verified-long-operation",
@@ -75,8 +78,10 @@
       "categories": [],
       "edgeTags": ["verified_identity"],
       "evidence": [
-        {"id": "verify-1", "source": "synthetic_verifying_directory", "subject": "exact_domain", "lineage": "directory-1", "claim": "Invented independently verified business identity, proved store linkage and independently verifiable operation over one year."}
+        {"id": "verify-1", "source": "synthetic_verifying_directory", "subject": "exact_domain", "lineage": "directory-1", "claim": "Invented independently verified business identity, proved store linkage and independently verifiable operation over one year."},
+        {"id": "steady-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-steady-check", "claim": "Invented independent review of target-store fulfillment and dispute records found no qualifying issues in the checked year."}
       ],
+      "targetInquiry": {"evidenceId": "steady-inquiry", "window": "12 months ending at the frozen snapshot", "result": "no_qualifying_findings"},
       "expectedConcern": "low",
       "highGate": "not_proposed",
       "rationale": "Illustrates narrow no-reviews Low exception, not domain age/HTTPS/self-published policy alone."
@@ -88,8 +93,10 @@
       "categories": [],
       "edgeTags": ["ordinary_delay"],
       "evidence": [
-        {"id": "delay-1", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-1", "claim": "Invented order arrived shortly after estimated delivery window."}
+        {"id": "delay-1", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-1", "claim": "Invented order arrived shortly after estimated delivery window."},
+        {"id": "delay-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-delay-check", "claim": "Invented independent check of target-store order and dispute records for the observed quarter found no qualifying non-delivery or other risky category beyond the documented resolved delay."}
       ],
+      "targetInquiry": {"evidenceId": "delay-inquiry", "window": "quarter ending at the frozen snapshot", "result": "no_qualifying_findings"},
       "expectedConcern": "caution",
       "highGate": "not_proposed",
       "rationale": "A late shipment is not credible non-delivery; caution may reflect limited independent track record."
@@ -97,7 +104,7 @@
     {
       "id": "similar-name-business",
       "storeOrigin": "https://lookalike-a.example",
-      "referenceLabel": "not_risky",
+      "referenceLabel": "indeterminate",
       "categories": [],
       "edgeTags": ["ambiguous_identity", "wrong_merchant"],
       "evidence": [
@@ -105,7 +112,7 @@
       ],
       "expectedConcern": "insufficient",
       "highGate": "reject",
-      "rationale": "Never transfer another business's review rating or complaint to the target domain."
+      "rationale": "Never transfer another business's review rating or complaint to the target domain; no independent target-store inquiry exists, so reference truth is unresolved."
     },
     {
       "id": "reposted-allegation",
@@ -161,7 +168,7 @@
     {
       "id": "hosted-tenants-not-one-store",
       "storeOrigin": "https://tenant-one.platform.example",
-      "referenceLabel": "not_risky",
+      "referenceLabel": "indeterminate",
       "categories": [],
       "edgeTags": ["tenant_isolation", "wrong_merchant"],
       "evidence": [
@@ -169,7 +176,7 @@
       ],
       "expectedConcern": "insufficient",
       "highGate": "reject",
-      "rationale": "Never collapse separate platform tenants or transfer evidence between them."
+      "rationale": "Never collapse separate platform tenants or transfer evidence between them; no independent inquiry about tenant-one exists, so reference truth is unresolved."
     }
   ]
 }
