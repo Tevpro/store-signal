@@ -70,6 +70,13 @@
       "expectedCoverage": "no_match"
     },
     {
+      "id": "healthy-nonempty-all-rejected",
+      "store": "independent",
+      "providerStatus": 200,
+      "resultCaseIds": ["substring-host-trap", "similar-name", "reddit-lookalike"],
+      "expectedCoverage": "no_match"
+    },
+    {
       "id": "quota-exhausted",
       "store": "independent",
       "providerStatus": 429,
