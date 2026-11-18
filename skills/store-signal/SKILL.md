@@ -18,7 +18,7 @@ Use when a delegated worker implements or reviews a StoreSignal GitHub issue. Th
 2. Claim one issue in Plane, confirm dependency PRs and exact scope, and work in an isolated branch/worktree. Do not start other workers.
 3. Write failing tests or synthetic fixtures for the behavior, including missing evidence, identity mismatches and security boundaries. Implement minimal code through ports so Cloudflare and Node backends stay interchangeable.
 4. Run focused tests and affected lint/typecheck/build; shared changes also run D1/Wrangler and SQLite/Node integration checks. Record actual results, not expected outputs.
-5. Open a scoped PR linked to the GitHub issue and Plane card; include tests, risk, evidence and rollback. Update Plane to QA Review only after verified implementation; independent review and human public-release approval remain separate.
+5. Open a scoped PR linked to the GitHub issue and Plane card; include tests, risk, evidence and rollback. Update Plane to QA Review only after verified implementation. Request Cassandra's review through the configured authenticated A2A peer `review` for every PR, resolve her findings and obtain re-review of the current head before merge. A local self-review does not count. See `docs/review-and-delivery.md`; human public-release approval remains separate.
 
 ## Pitfalls
 
