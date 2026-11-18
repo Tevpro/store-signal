@@ -2,6 +2,8 @@
 
 GitHub Issues carry acceptance criteria; Plane mirrors implementation ownership and status. The GitHub Project is the planning view. Do not move all issues to In Progress or dispatch workers until the prerequisites below pass.
 
+Live ledgers: [GitHub issues](https://github.com/Tevpro/store-signal/issues) and [GitHub project](https://github.com/orgs/Tevpro/projects/37). Plane project: StoreSignal (`STSIG`). The GitHub Project's visibility remains private until an organization administrator authorizes making it public.
+
 1. **Gate 0: feasibility and governance.** License decision; approved search/Google Places terms and access; source identity policy, privacy/dispute/publication threat model; initial labeled evaluation plan. No expensive connector implementation before rights are confirmed.
 2. **Foundation: dual-runtime skeleton.** Shared versioned contracts, deterministic evidence core, D1 and SQLite migrations, atomic job admission/limits, API test harness and CI. Prove same fixtures in Wrangler local and Node before delegating separate connectors.
 3. **Evidence: independent connectors.** Search-indexed Reddit results, exact-entity Google Business Profile, verified business/operating history, coverage failure states; contract tests with synthetic examples and bounded live smoke by credential-aware operator.

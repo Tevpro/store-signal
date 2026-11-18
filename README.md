@@ -14,7 +14,7 @@ Open-source, evidence-backed assessments of unfamiliar online stores. **Planning
 
 ## Work ledgers
 
-GitHub Issues and the GitHub Project are the technical backlog and code/PR ledger. Plane is the internal assignment/status ledger. Every Plane work item must link its canonical GitHub issue, and every implementation PR must link both. **Nothing is assigned or running just because a card exists.** See [AGENTS.md](AGENTS.md).
+GitHub [Issues](https://github.com/Tevpro/store-signal/issues) and the [StoreSignal Build project](https://github.com/orgs/Tevpro/projects/37) are the technical backlog and code/PR ledger. The dedicated Plane project **StoreSignal (STSIG)** is the internal assignment/status ledger. Every Plane work item must link its canonical GitHub issue, and every implementation PR must link both. **Nothing is assigned or running just because a card exists.** See [AGENTS.md](AGENTS.md). The GitHub Project is currently private to authorized collaborators because the authenticated GitHub account cannot change project visibility; the repository and issues are public.
 
 ## Status and licensing
 
