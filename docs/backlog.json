@@ -1,0 +1,373 @@
+[
+  {
+    "key": "G01",
+    "title": "Choose an OSI license and contribution/trademark policy",
+    "phase": "P0",
+    "area": "governance",
+    "depends_on": [],
+    "acceptance": [
+      "Record license tradeoff and approved SPDX license; add LICENSE and contribution terms after approval.",
+      "No third-party code merged before the license decision."
+    ]
+  },
+  {
+    "key": "G02",
+    "title": "Validate licensed search provider for indexed Reddit evidence",
+    "phase": "P0",
+    "area": "research",
+    "depends_on": [],
+    "acceptance": [
+      "Compare approved search APIs for indexed Reddit URLs, coverage, quotas, cost and Workers/Node compatibility.",
+      "Document compliant links/snippets/cache retention and test exact-domain identity matching with synthetic cases.",
+      "Do not implement unauthorized scraping or claim full Reddit coverage."
+    ]
+  },
+  {
+    "key": "G03",
+    "title": "Validate Google Places access and exact-business identity mapping",
+    "phase": "P0",
+    "area": "research",
+    "depends_on": [],
+    "acceptance": [
+      "Verify API credentials, billing, attribution and storage/display terms for rating and review count.",
+      "Document exact-store matching, no-match and ambiguous-match cases; test a bounded sample with approved access.",
+      "Record provider rate limits and both deployment configurations."
+    ]
+  },
+  {
+    "key": "G04",
+    "title": "Create adjudicated evaluation dataset and measurement protocol",
+    "phase": "P0",
+    "area": "qa",
+    "depends_on": [],
+    "acceptance": [
+      "Define risky labels, independent review process, sampling and uncertainty reporting; use permitted data/synthetic fixtures.",
+      "Specify launch gates: >=80% risky Caution/High and <=5% false High among High outputs.",
+      "Ensure benign new stores, ambiguous business names, reposts and malicious content are represented."
+    ]
+  },
+  {
+    "key": "G05",
+    "title": "Approve threat, privacy, and public-claims operating policy",
+    "phase": "P0",
+    "area": "governance",
+    "depends_on": [],
+    "acceptance": [
+      "Document privacy/retention, anonymous identity limits, SSRF and prompt-injection controls, correction SLA and evidence-validation gate.",
+      "Define public High concern language and appeal path; review source-attribution and US-English scope.",
+      "No public launch on unreviewed draft policy."
+    ]
+  },
+  {
+    "key": "F01",
+    "title": "Scaffold TypeScript monorepo and dual-runtime test harness",
+    "phase": "P1",
+    "area": "foundation",
+    "depends_on": [
+      "G02",
+      "G03"
+    ],
+    "acceptance": [
+      "Choose package manager/runtime versions and workspace layout for apps and packages in one repository.",
+      "Create runnable Wrangler-local and Node/SQLite smoke tests with shared fixtures and locked dependencies.",
+      "Document exact commands; do not provision production resources."
+    ]
+  },
+  {
+    "key": "F02",
+    "title": "Define versioned domain identity, evidence, coverage and assessment contracts",
+    "phase": "P1",
+    "area": "foundation",
+    "depends_on": [
+      "F01"
+    ],
+    "acceptance": [
+      "Define runtime-validated /v1 schemas for store identity, coverage, evidence and assessment with explicit limited/no-match/failed states.",
+      "Test hosted tenant subdomain separation, URL normalization and backwards-compatible serialization.",
+      "Core imports no Node/Cloudflare provider SDKs."
+    ]
+  },
+  {
+    "key": "F03",
+    "title": "Implement portable persistence and migration adapters",
+    "phase": "P1",
+    "area": "backend",
+    "depends_on": [
+      "F02"
+    ],
+    "acceptance": [
+      "Same schema semantics verified on D1 and local SQLite; tested migration up/down or safe forward recovery.",
+      "Persist dated evidence references, jobs, corrections and account-separated private analysis without storing full review corpora.",
+      "Include retention/deletion tests and no production IDs/secrets."
+    ]
+  },
+  {
+    "key": "F04",
+    "title": "Implement atomic job admission, cache freshness and quotas",
+    "phase": "P1",
+    "area": "backend",
+    "depends_on": [
+      "F03"
+    ],
+    "acceptance": [
+      "One new investigation/store/min globally with concurrent join and crash-safe retry; week-long freshness and owner/admin early refresh path.",
+      "Enforce 5 new jobs/min/user, 30 cached reads/min/user, separate status/AI quotas and anonymous abuse backstop.",
+      "Race tests on both runtimes; no D1 read-then-write assumption."
+    ]
+  },
+  {
+    "key": "F05",
+    "title": "Implement versioned check/status/store API",
+    "phase": "P1",
+    "area": "backend",
+    "depends_on": [
+      "F04"
+    ],
+    "acceptance": [
+      "POST /v1/checks and GET /v1/checks/{id} return cached/checking/complete/rate-limited/unsupported with retry-after.",
+      "Normalize origins, validate public fetch destinations, redirects and body bounds; never forward shopper cookies.",
+      "Contract tests in Wrangler local and Node with no external credentials."
+    ]
+  },
+  {
+    "key": "F06",
+    "title": "Add CI, fixtures, dependency and cross-runtime gates",
+    "phase": "P1",
+    "area": "qa",
+    "depends_on": [
+      "F05"
+    ],
+    "acceptance": [
+      "CI runs formatting, lint, strict typecheck, unit/integration tests, dual-runtime smoke, build and audit.",
+      "Synthetic fixtures cover identity confusion, outage vs no-match, low-review-count, duplicate jobs and malicious source text.",
+      "Document required check names before enforcing branch protection."
+    ]
+  },
+  {
+    "key": "E01",
+    "title": "Build approved indexed-Reddit search connector",
+    "phase": "P2",
+    "area": "connectors",
+    "depends_on": [
+      "F05",
+      "G02"
+    ],
+    "acceptance": [
+      "Use operator-configured approved search provider; return direct indexed Reddit URLs with timestamps and source metadata.",
+      "Only exact domain/corroborated store identity affects rating; deduplicate reposts; no complete-coverage claims.",
+      "Fixtures for missing results, provider outage, quota and malicious snippets on both runtimes."
+    ]
+  },
+  {
+    "key": "E02",
+    "title": "Build Google Business Profile connector and match validator",
+    "phase": "P2",
+    "area": "connectors",
+    "depends_on": [
+      "F05",
+      "G03"
+    ],
+    "acceptance": [
+      "Use configured Places API; exact-entity match with documented rationale and explicit ambiguity/no-match.",
+      "Return linked rating, review count and observed date with required attribution; no full review corpus persisted.",
+      "Test similarly named businesses and below-3.0/20-review boundary."
+    ]
+  },
+  {
+    "key": "E03",
+    "title": "Implement verified business identity and operating-history evidence",
+    "phase": "P2",
+    "area": "connectors",
+    "depends_on": [
+      "F05",
+      "G05"
+    ],
+    "acceptance": [
+      "Document and test actually verifying directories/providers with store-to-identity link and >=1 year independent operation.",
+      "Do not equate domain age, HTTPS, policy pages or payment logos with verified business identity.",
+      "Return missing/ambiguous provenance as no match or limited evidence."
+    ]
+  },
+  {
+    "key": "E04",
+    "title": "Implement concern policy, provenance and public evidence gate",
+    "phase": "P2",
+    "area": "core",
+    "depends_on": [
+      "E01",
+      "E02",
+      "E03",
+      "G04"
+    ],
+    "acceptance": [
+      "Distinguish Caution limited-history vs negative-evidence; no reviews alone never proof of fraud.",
+      "One credible Reddit complaint can support Caution; High requires corroboration except exact matched Google rating <3.0 with >=20 reviews, always validated.",
+      "All public High concern outputs carry attributable, dated, independent sources and pass gate; failure downgrades with explicit reason."
+    ]
+  },
+  {
+    "key": "U01",
+    "title": "Ship click-to-check Chrome/Chromium MV3 extension",
+    "phase": "P3",
+    "area": "frontend",
+    "depends_on": [
+      "F05"
+    ],
+    "acceptance": [
+      "Explicit click only; send normalized store origin, no screenshots/full HTML or passive browsing collection.",
+      "Display cached/checking/limited/caution/high/insufficient, sources, confidence and last checked.",
+      "Extension points to hosted or self-hosted API; permission/privacy and browser smoke tests."
+    ]
+  },
+  {
+    "key": "U02",
+    "title": "Build public noindex store result pages",
+    "phase": "P3",
+    "area": "frontend",
+    "depends_on": [
+      "E04"
+    ],
+    "acceptance": [
+      "Shareable dated evidence/coverage pages, noindex at launch, accessible UI and cautious non-defamatory copy.",
+      "Cached result and in-progress state accurate; no personal check history.",
+      "Verify noindex header/meta, source links, no-match disclosure, accessibility and correction link."
+    ]
+  },
+  {
+    "key": "U03",
+    "title": "Implement domain ownership verification and early refresh",
+    "phase": "P3",
+    "area": "backend",
+    "depends_on": [
+      "F04",
+      "U02"
+    ],
+    "acceptance": [
+      "Verify DNS TXT or site-file proof bound to exact store identity and tenant subdomain.",
+      "Only verified owner/admin may refresh before weekly expiry, still respecting global cooldown; ownership never changes concern.",
+      "Audit proof/expiry/revocation and reject same-name impersonation."
+    ]
+  },
+  {
+    "key": "U04",
+    "title": "Implement disputes, human review and public correction notices",
+    "phase": "P3",
+    "area": "frontend",
+    "depends_on": [
+      "U02",
+      "U03",
+      "G05"
+    ],
+    "acceptance": [
+      "Any reader can report a factual issue; credible High concern dispute flags page for human review while dated finding remains.",
+      "Moderation records decision; public correction notices show factual changes, routine reassessments not exposed.",
+      "No store owner can delete or self-edit verdict."
+    ]
+  },
+  {
+    "key": "A01",
+    "title": "Implement provider-pluggable private BYOK analysis",
+    "phase": "P4",
+    "area": "ai",
+    "depends_on": [
+      "E04",
+      "F03"
+    ],
+    "acceptance": [
+      "Capability-based AI interface, structured output with evidence IDs and prompt-injection defenses; non-AI result stays functional and marked limited.",
+      "BYOK key encrypted server-side, deletable, redacted in logs and isolated by account; BYOK result private and cannot mutate public verdict.",
+      "Test at least two provider adapters with fixtures; local-only models unavailable to Workers are documented."
+    ]
+  },
+  {
+    "key": "A02",
+    "title": "Implement managed AI allowance, metering and public validation",
+    "phase": "P4",
+    "area": "ai",
+    "depends_on": [
+      "A01",
+      "E04"
+    ],
+    "acceptance": [
+      "Logged-in request only; small free allowance and paid usage design with independent AI quota and no anonymous managed AI spend.",
+      "Managed AI proposal may update public result only after identity, citations and publication gate succeed.",
+      "Provide billing/abuse tests and explicit fail-closed behavior; do not enable paid usage without approval."
+    ]
+  },
+  {
+    "key": "D01",
+    "title": "Package and verify Cloudflare Workers deployment",
+    "phase": "P4",
+    "area": "deployment",
+    "depends_on": [
+      "F06",
+      "U04",
+      "A02"
+    ],
+    "acceptance": [
+      "Document Wrangler/D1/Queues/secrets setup and reproducible local bootstrap; no hardcoded live IDs.",
+      "Verify API, worker, public page and dispute flow against actual Worker local runtime.",
+      "Live provisioning and external provider smoke require separately approved credentials."
+    ]
+  },
+  {
+    "key": "D02",
+    "title": "Package and verify conventional self-hosted deployment",
+    "phase": "P4",
+    "area": "deployment",
+    "depends_on": [
+      "F06",
+      "U04",
+      "A02"
+    ],
+    "acceptance": [
+      "Document Node/SQLite durable jobs, backups/migrations, secret configuration and container deployment.",
+      "Same API/public/owner/dispute acceptance suite as Cloudflare; startup refuses absent search/Places config.",
+      "Provide bootstrap fixture, health/readiness and upgrade/rollback instructions."
+    ]
+  },
+  {
+    "key": "L01",
+    "title": "Run independent launch evaluation and security/privacy review",
+    "phase": "P4",
+    "area": "qa",
+    "depends_on": [
+      "D01",
+      "D02",
+      "G04",
+      "G05"
+    ],
+    "acceptance": [
+      "Measure thresholds on independent labeled dataset and publish sample size, false-High precision, risky detection and uncertainty.",
+      "Test concurrent limits, SSRF, tenant isolation, correction response, public noindex and provider terms in both deployments.",
+      "Block public launch when gates or licensing unresolved; no unverified performance claim."
+    ]
+  },
+  {
+    "key": "N01",
+    "title": "Research product/image match and alternative-vendor phase",
+    "phase": "LATER",
+    "area": "research",
+    "depends_on": [
+      "L01"
+    ],
+    "acceptance": [
+      "Design licensed image/product search and gold set for same-product vs same-photo false matches.",
+      "Recommendations require delivered price, variant match and documented protections; no paid placement in safety ranking.",
+      "No v1 screenshot, evasion or product comparison implementation."
+    ]
+  },
+  {
+    "key": "N02",
+    "title": "Plan Firefox, broader markets and anti-evasion after v1",
+    "phase": "LATER",
+    "area": "research",
+    "depends_on": [
+      "L01"
+    ],
+    "acceptance": [
+      "Document permission and API differences, language/local data licensing, and evidence for bot-evasion work.",
+      "Keep separate from v1 launch scope; no speculative crawler bypass."
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+# StoreSignal worker instructions
+
+**Read this entire file before claiming a card.** This is the sole product monorepo and currently contains architecture and planning docs, not a working product. Keep extension, API, workers, shared packages, deployment adapters and skills together. Never claim a feature is implemented because an issue or package path appears in a plan.
+
+## Source of truth and work ownership
+
+1. Read `README.md`, `docs/requirements.md`, `docs/architecture.md`, `docs/coding-standards.md`, `docs/decisions.md`, and the assigned GitHub issue, including comments. Load `skills/store-signal/SKILL.md` explicitly if your agent runtime does not auto-discover repository skills.
+2. GitHub Issue = canonical scope/acceptance; Plane card = internal owner/status and blockers; GitHub Project = planning/visibility; PR = implementation and review evidence. Plane cards must link their GitHub issue. Do not create a second canonical backlog in Plane. No worker is assigned by the presence of a card alone.
+3. Claim *one* unassigned issue only after an operator names you. Move the Plane card to In Progress, record your handle and branch in a comment, and confirm dependencies/previous PRs. Do not self-spawn workers or fan out adjacent tasks without operator approval. Use isolated branch/worktree, one coherent PR per issue, target `main` unless an explicit dependency requires stacking.
+4. Before writing code, state affected packages, provider credentials needed, validation commands and threat boundaries. If requirements conflict (e.g., AI public ratings vs no-AI fallback), flag it rather than silently resolving. No access to production secrets is assumed. Never paste credentials in issues, logs, prompts, or chat.
+5. Test on the actual requested runtimes. Core/contracts work must pass both Wrangler-local and Node/SQLite integration tests before handoff. For connector work, use fixtures, not unauthorized scraping or live account data. If a required service is inaccessible, block the Plane card with exact prerequisite and leave the issue open.
+6. Open PR with `Closes #N`, Plane card link, exact tests/CI evidence, risk and rollback; update Plane with the PR link and move to QA Review only after code exists and validations pass. Reviewer is independent of author; unresolved concerns block merge. Human approval is required for public release, provider terms/paid accounts, changing the license, and production deployment.
+
+## Toolkit by task
+
+- **Discovery/research:** official provider docs and terms, `web_search`/`web_extract` if available, or verified direct fetch; cite URLs and dates in docs. Do not infer API rights from search snippets.
+- **Repo/issues/PR:** `git`, `gh`, GitHub Projects v2; inspect existing issues/branches before creating new ones. Issue is technical truth; Plane status must mirror real PR state.
+- **Tracker:** Plane MCP project `StoreSignal` (`STSIG`). Never write into Website, AI Sales, or unrelated boards. Use a single linked Plane card per GitHub implementation issue.
+- **Implementation:** TypeScript strict, package manager chosen in foundation issue, Wrangler local Worker/D1/Queues test harness and Node/SQLite harness. No provider credentials in repo; synthetic fixtures and contract tests.
+- **Review:** issue acceptance, source/identity and publication gates, SSRF/secret paths, two-runtime tests, rate-limit concurrency, public noindex/correction workflow. Request changes when evidence is missing.
+- **Skill authoring:** repo-local skill is a **team procedure**, not a globally installed Hermes profile skill. Read it explicitly in delegated prompts. Maintain it when a repeatable pitfall is discovered; don't overwrite another agent's global skills.
+
+## Non-goals / no-go actions
+
+Do not implement product/image matching, screenshot capture, passive extension browsing, automatic posting about a named store, or attempts to bypass bot defenses under a v1 issue. Do not assume a cached result means a site is safe. Do not merge or deploy solely because an AI reviewer said yes.
