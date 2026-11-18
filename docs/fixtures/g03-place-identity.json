@@ -1,0 +1,74 @@
+{
+  "description": "Synthetic discovery examples, not Google responses or executable product tests. Candidate website URIs are untrusted and must not be fetched. 'matched' is conditional on independently reviewed site association and entity evidence.",
+  "cases": [
+    {
+      "id": "one-exact-custom-domain",
+      "storeOrigin": "https://juniper-craft.example",
+      "candidates": [{"placeId": "synthetic-01", "name": "Juniper Craft", "websiteUri": "https://juniper-craft.example/"}],
+      "expected": "matched",
+      "reason": "Single exact custom-domain candidate, assuming independent brand/site association is confirmed"
+    },
+    {
+      "id": "no-results-healthy",
+      "storeOrigin": "https://unlisted.example",
+      "providerStatus": "healthy",
+      "candidates": [],
+      "expected": "no_match",
+      "reason": "Healthy bounded lookup returned no candidate; no rating exists for this store"
+    },
+    {
+      "id": "auth-failure-not-no-match",
+      "storeOrigin": "https://unlisted.example",
+      "providerStatus": "auth_failed",
+      "candidates": [],
+      "expected": "failed",
+      "reason": "Credential or billing error is connector failure, not absence of a business"
+    },
+    {
+      "id": "similar-name-no-site",
+      "storeOrigin": "https://rivertrail.example",
+      "candidates": [{"placeId": "synthetic-02", "name": "River Trail", "websiteUri": null}],
+      "expected": "ambiguous",
+      "reason": "Name similarity without a website association cannot establish exact store identity"
+    },
+    {
+      "id": "suffix-trick",
+      "storeOrigin": "https://rivertrail.example",
+      "candidates": [{"placeId": "synthetic-03", "name": "River Trail", "websiteUri": "https://rivertrail.example.evil.test/"}],
+      "expected": "no_match",
+      "reason": "Lookalike suffix is a different host; no other candidates"
+    },
+    {
+      "id": "separate-hosted-tenants",
+      "storeOrigin": "https://orchid.marketplace.example",
+      "tenantKey": "orchid",
+      "candidates": [{"placeId": "synthetic-04", "name": "Orchid", "websiteUri": "https://cedar.marketplace.example/"}],
+      "expected": "no_match",
+      "reason": "Tenant identity is distinct even under the same platform registrable domain"
+    },
+    {
+      "id": "same-name-two-branches",
+      "storeOrigin": "https://wildfern.example",
+      "candidates": [
+        {"placeId": "synthetic-05", "name": "Wild Fern - North", "websiteUri": "https://wildfern.example/"},
+        {"placeId": "synthetic-06", "name": "Wild Fern - South", "websiteUri": "https://wildfern.example/"}
+      ],
+      "expected": "ambiguous",
+      "reason": "Two distinct location IDs share a site; neither may be chosen by rank or stars"
+    },
+    {
+      "id": "corporate-site-franchise",
+      "storeOrigin": "https://harborwear.example",
+      "candidates": [{"placeId": "synthetic-07", "name": "Harborwear Downtown", "websiteUri": "https://harborwear.example/"}],
+      "expected": "ambiguous",
+      "reason": "Shared corporate site does not prove that a single franchise location represents the online store"
+    },
+    {
+      "id": "moved-business",
+      "storeOrigin": "https://seabird.example",
+      "candidates": [{"placeId": "synthetic-08", "name": "Seabird", "websiteUri": "https://seabird.example/", "businessStatus": "CLOSED_PERMANENTLY", "movedPlaceId": "synthetic-09"}],
+      "expected": "ambiguous",
+      "reason": "Moved or closed listing needs separately checked successor; never reuse stale rating"
+    }
+  ]
+}
