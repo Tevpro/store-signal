@@ -48,6 +48,8 @@ See [synthetic fixture cases](fixtures/g03-place-identity.json). They specify ex
 | Validation | Approved bounded live sample and exact-match adjudication, negative cases, actual Worker + Node egress and integration results | **Not executed** |
 | Launch | Independent review, correction workflow, noindex, provider configuration/readiness; unrelated search provider gate | **Outside G03, still required** |
 
+Track the unresolved G03 gates on [GitHub #3](https://github.com/Tevpro/store-signal/issues/3), mirrored by [Plane STSIG-3](https://plane.tevpro.com/tevpro/browse/STSIG-3) in **In Progress**. The project operator owns provisioning and documenting enabled billing, restricted credentials and actual console quotas; operator/legal and the provider must resolve public display, caching and derived-content rights; an authorized implementer must then run the approved bounded sample and verify Worker and Node egress/integration. Independent review follows that evidence. This PR is only a discovery checkpoint and must not automatically close #3 or move STSIG-3 to QA Review.
+
 Rollback for this docs-only checkpoint: revert the PR. No production feature, provider call, data migration, account change, or rating display was made.
 
 ## Sources
