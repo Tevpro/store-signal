@@ -14,7 +14,7 @@
       "providerStatus": "healthy",
       "candidates": [],
       "expected": "no_match",
-      "reason": "Healthy bounded lookup returned no candidate; no rating exists for this store"
+      "reason": "Healthy bounded lookup returned no candidate; no matched rating found in this bounded lookup"
     },
     {
       "id": "auth-failure-not-no-match",
