@@ -2,7 +2,7 @@
 
 ## Confirmed
 
-- Public repository and intended open-source product; license **deferred**, no license grant yet.
+- Public repository and intended open-source product. Keith Kikta's [explicit rights-holder decision](https://github.com/Tevpro/store-signal/issues/1#issuecomment-6993127807) selects GNU Affero General Public License v3 **only** (SPDX `AGPL-3.0-only`, not `AGPL-3.0-or-later`) for Tevpro-owned project code, DCO 1.1 contributor sign-offs and a separate StoreSignal/Tevpro trademark policy. This supersedes the [earlier Apache-2.0 recommendation](https://github.com/Tevpro/store-signal/issues/1#issuecomment-6987207095), which was a discovery proposal, not an approval. The scoped [LICENSE](../LICENSE), [CONTRIBUTING.md](../CONTRIBUTING.md), and [TRADEMARKS.md](../TRADEMARKS.md) stage the decision in a draft PR pending review; until merged, main remains unlicensed. DCO is not a copyright assignment or a future proprietary-relicensing grant.
 - Click-to-check Chrome/Chromium v1; store risk with citations first; product/image comparison later. No screenshot or full-HTML capture in v1.
 - Hosted API + self-hosted packaging both support Cloudflare Workers and Node/SQLite from first public release. Shared core and versioned contract.
 - Public shareable noindex store pages. Owner verification DNS TXT/file; corrections remain public and get human review when credible. Routine refresh history internal; corrections visible.
@@ -15,7 +15,7 @@
 
 ## Open, do not guess
 
-- OSI license, contributor license and trademark policy before release.
-- Approved search provider terms and cost; Google Places identity, display/attribution, caching and payment rules; exact approval of indexed Reddit snippets/link handling. Product launch blocked until both connectors configured and verified. **A search result is not a Reddit data-API license.**
+- Before merging the license PR: Tevpro ownership/authority for existing Rick-authored planning docs and any contributions from others; provenance and AGPL-3.0-only compatibility of dependencies in future code branches (the clean main branch currently has no dependency manifest). Independent code-owner approval, Cassandra current-head review, repository protection and human release approval remain separate gates. A public repo or a draft license PR alone does not grant reuse rights.
+- Approved search provider terms and cost; Google Places identity, display/attribution, caching and payment rules; exact approval of indexed Reddit snippets/link handling. Product launch blocked until both connectors configured and verified. **A search result is not a Reddit data-API license.** The project software license excludes third-party provider data and does not license StoreSignal/Tevpro brand marks.
 - Final paid AI allowance/pricing and tenant quota structure. Exact provider adapters and app frameworks/package manager selected in foundation issues, not implied by diagrams.
 - Evaluation dataset composition, reviewer adjudication protocol, confidence intervals, correction response target and security/privacy retention schedule. No benchmark claim without real measurement.
