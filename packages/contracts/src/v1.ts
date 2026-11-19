@@ -103,6 +103,9 @@ export function normalizeStoreIdentity(input: string, rules: readonly HostedTena
     if (candidate.platformDomain !== candidate.platformDomain.toLowerCase() || !/^[a-z0-9.-]+$/.test(candidate.platformDomain) || !Number.isInteger(candidate.tenantLabels) || candidate.tenantLabels < 1) return invalid('hosted rule');
     return hostname.endsWith(`.${candidate.platformDomain}`);
   });
+  // The ICANN-only view collapses unrelated tenants on private PSL suffixes.
+  // Reject those hosts unless a trusted, reviewed rule defines their tenant boundary.
+  if (!rule && parseDomain(hostname, { allowPrivateDomains: true }).isPrivate) return invalid('private hosted suffix without reviewed rule');
   let tenantKey: string | undefined;
   if (rule) {
     const prefix = hostname.slice(0, -rule.platformDomain.length - 1);
@@ -165,6 +168,11 @@ function parseAssessment(input: unknown): Assessment {
   if (Date.parse(expiresAt) <= Date.parse(checkedAt)) invalid('expiry');
   const ai = enumValue(v.aiMode, ['none', 'managed', 'byok'], 'aiMode');
   const publication = enumValue(v.publicationStatus, ['draft', 'held', 'published'], 'publicationStatus');
+  const allNoMatch = coverage.every((c: Coverage) => c.status === 'no_match');
+  const allFailed = coverage.every((c: Coverage) => c.status === 'failed');
+  const hasUsableSource = evidenceIds.length > 0 || coverage.some((c: Coverage) => c.status === 'checked');
+  if (allNoMatch && status !== 'no_match' || allFailed && status !== 'failed' ||
+      !hasUsableSource && concern !== 'insufficient') invalid('assessment state');
   if (status === 'no_match' && (concern !== 'insufficient' || evidenceIds.length || coverage.some((c: Coverage) => c.status !== 'no_match')) ||
       status === 'failed' && (concern !== 'insufficient' || evidenceIds.length || !coverage.some((c: Coverage) => c.status === 'failed') || coverage.some((c: Coverage) => c.status === 'checked')) ||
       status === 'complete' && (ai === 'none' || coverage.some((c: Coverage) => c.status === 'failed' || c.status === 'unavailable')) ||

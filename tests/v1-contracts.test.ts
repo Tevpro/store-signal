@@ -24,6 +24,10 @@ test('reviewed hosted rules isolate tenant labels including nested tenancy', () 
   assert.notEqual(normalizeStoreIdentity('https://fakeplatform.example', tenantRules).storeId, a.storeId);
   assert.equal(normalizeStoreIdentity('https://brand.com', tenantRules).tenantKey, undefined);
   assert.notEqual(normalizeStoreIdentity('https://shop-a.myshopify.com').storeId, normalizeStoreIdentity('https://shop-b.myshopify.com').storeId);
+  for (const suffix of ['pages.dev', 'github.io']) {
+    assert.throws(() => normalizeStoreIdentity(`https://a.${suffix}`), /private hosted suffix/, suffix);
+    assert.throws(() => normalizeStoreIdentity(`https://b.${suffix}`), /private hosted suffix/, suffix);
+  }
   const nested = normalizeStoreIdentity('https://shop-a.branch.shops.example', tenantRules);
   assert.throws(() => parseV1('identity', nested));
   assert.deepEqual(parseV1('identity', nested, tenantRules), nested);
@@ -88,6 +92,25 @@ test('assessment evidence references must belong to the same store and be known'
   assert.equal(parseAssessmentWithEvidence(limited, golden.evidence).evidenceIds[0], 'ev-1');
   assert.throws(() => parseAssessmentWithEvidence({ ...limited, evidenceIds: ['missing'] }, golden.evidence));
   assert.throws(() => parseAssessmentWithEvidence(limited, [{ ...golden.evidence[0], storeId: 'domain:other.com' }]));
+});
+
+test('no usable source cannot become a positive assessment by changing status', () => {
+  const golden = JSON.parse(readFileSync(new URL('./fixtures/v1-records.json', import.meta.url), 'utf8')) as { assessment: Record<string, unknown>[] };
+  const base = golden.assessment[3]!;
+  const coverage = (status: string) => [{ schemaVersion: 1, connector: 'search', status, checkedAt: '2026-01-01T00:00:00Z', ...(status === 'unavailable' ? { limitation: 'Not configured' } : {}), ...(status === 'failed' ? { errorCode: 'TIMEOUT' } : {}) }];
+  for (const [status, resultStatus] of [['no_match', 'complete'], ['unavailable', 'limited'], ['failed', 'limited']] as const) {
+    const record = { ...base, status: resultStatus, concern: 'low', confidence: 'high', evidenceIds: [], coverage: coverage(status), publicationStatus: 'published' };
+    assert.throws(() => parseV1('assessment', record), Error, status);
+    assert.throws(() => parseAssessmentWithEvidence(record, []), Error, status);
+    assert.throws(() => serializeV1('assessment', record), Error, status);
+  }
+  assert.throws(() => parseV1('assessment', { ...base, coverage: coverage('no_match'), evidenceIds: ['ev-1'] }), /assessment state/);
+  for (const status of ['unavailable', 'failed']) {
+    assert.throws(() => parseV1('assessment', { ...base, status: status === 'failed' ? 'failed' : 'limited', concern: 'caution', evidenceIds: [], coverage: coverage(status) }), /assessment state/);
+  }
+  assert.equal(parseV1('assessment', { ...base, status: 'no_match', concern: 'insufficient', confidence: 'insufficient', evidenceIds: [], coverage: coverage('no_match'), publicationStatus: 'draft' }).status, 'no_match');
+  assert.equal(parseV1('assessment', { ...base, status: 'limited', concern: 'insufficient', confidence: 'insufficient', evidenceIds: [], coverage: coverage('unavailable'), publicationStatus: 'draft' }).status, 'limited');
+  assert.equal(parseV1('assessment', { ...base, status: 'failed', concern: 'insufficient', confidence: 'insufficient', evidenceIds: [], coverage: coverage('failed'), publicationStatus: 'held' }).status, 'failed');
 });
 
 test('partial connector failures stay limited, not complete or total failure', () => {
