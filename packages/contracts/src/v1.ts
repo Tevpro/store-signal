@@ -1,55 +1,8 @@
 import { parse as parseDomain } from 'tldts';
 
-/** Portable /v1 wire records. Validators preserve unknown additive fields on roundtrips. */
-export interface StoreIdentity {
-  readonly schemaVersion: 1;
-  readonly storeId: string;
-  readonly origin: string;
-  readonly registrableDomain: string;
-  readonly tenantKey?: string;
-  readonly matchExplanation: string;
-}
-export interface Evidence {
-  readonly schemaVersion: 1;
-  readonly id: string;
-  readonly storeId: string;
-  readonly kind: string;
-  readonly sourceUrl: string;
-  readonly provider: string;
-  readonly retrievedAt: string;
-  readonly observedAt?: string;
-  readonly subjectMatch: { readonly status: 'exact' | 'corroborated' | 'ambiguous' | 'unmatched'; readonly rationale: string };
-  readonly claim: string;
-  readonly excerpt?: string;
-  readonly excerptRights?: 'permitted';
-  readonly limitations: readonly string[];
-  readonly lineage: readonly string[];
-}
-export interface Coverage {
-  readonly schemaVersion: 1;
-  readonly connector: string;
-  readonly status: 'checked' | 'no_match' | 'unavailable' | 'failed';
-  readonly checkedAt: string;
-  readonly limitation?: string;
-  readonly errorCode?: string;
-}
-export interface Assessment {
-  readonly schemaVersion: 1;
-  readonly id: string;
-  readonly storeId: string;
-  readonly status: 'complete' | 'limited' | 'no_match' | 'failed';
-  readonly concern: 'low' | 'caution' | 'high' | 'insufficient';
-  readonly reasonCodes: readonly string[];
-  readonly confidence: 'low' | 'medium' | 'high' | 'insufficient';
-  readonly evidenceIds: readonly string[];
-  readonly coverage: readonly Coverage[];
-  readonly limitations: readonly string[];
-  readonly checkedAt: string;
-  readonly expiresAt: string;
-  readonly aiMode: 'none' | 'managed' | 'byok';
-  readonly publicationStatus: 'draft' | 'held' | 'published';
-}
-export interface HostedTenantRule { readonly platformDomain: string; readonly tenantLabels: number }
+import type { Assessment, Coverage, Evidence, HostedTenantRule, StoreIdentity, V1Records } from './types/v1.ts';
+export type { Assessment, Coverage, Evidence, HostedTenantRule, StoreIdentity, V1Records } from './types/v1.ts';
+
 /** Small reviewed registry; add platforms only with their tenant-host semantics tested. */
 export const HOSTED_TENANT_RULES: readonly HostedTenantRule[] = [
   { platformDomain: 'myshopify.com', tenantLabels: 1 },
@@ -181,7 +134,6 @@ function parseAssessment(input: unknown): Assessment {
       (status === 'failed' || status === 'no_match') && publication === 'published') invalid('assessment state');
   return v as unknown as Assessment;
 }
-export interface V1Records { identity: StoreIdentity; evidence: Evidence; coverage: Coverage; assessment: Assessment }
 export function parseV1<K extends keyof V1Records>(kind: K, input: unknown, trustedRules: readonly HostedTenantRule[] = []): V1Records[K] {
   if (kind === 'identity') return parseIdentity(input, trustedRules) as V1Records[K];
   const parser = { evidence: parseEvidence, coverage: parseCoverage, assessment: parseAssessment }[kind as 'evidence' | 'coverage' | 'assessment'];
