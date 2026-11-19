@@ -8,6 +8,7 @@ Planned evidence-backed assessments of unfamiliar online stores. **Only a local,
 - [System architecture and contracts](docs/architecture.md)
 - [Coding standards](docs/coding-standards.md)
 - [Agent/worker playbook](AGENTS.md) and [project skill](skills/store-signal/SKILL.md)
+- [PR review and delivery gate](docs/review-and-delivery.md)
 - [Delivery phases and dependencies](docs/roadmap.md)
 - [Decisions and unresolved questions](docs/decisions.md)
 - [Contributing](CONTRIBUTING.md) | [Security](SECURITY.md)
