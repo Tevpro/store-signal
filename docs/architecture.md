@@ -2,7 +2,7 @@
 
 ## Principle
 
-One planned TypeScript **monorepo** (AGPL-3.0-only selected for Tevpro-owned code; draft license unmerged and rights/authority unverified, so no effective grant on `main` yet) with ports for runtime, data, jobs, web search, Google Places, and AI. No Cloudflare binding, Node-only module, SDK-specific model call, or provider search result inside the pure assessment/rating package. The browser extension, public pages and third-party API all consume the same versioned result schema. Repo layout below is **proposed**; implementation issues may refine it with an ADR. Do not split extension, backend or Cloudflare adapters into separate repositories.
+One planned TypeScript **monorepo** (Apache-2.0 selected for Tevpro-owned code; draft license unmerged and rights/authority unverified, so no effective grant on `main` yet) with ports for runtime, data, jobs, web search, Google Places, and AI. No Cloudflare binding, Node-only module, SDK-specific model call, or provider search result inside the pure assessment/rating package. The browser extension, public pages and third-party API all consume the same versioned result schema. Repo layout below is **proposed**; implementation issues may refine it with an ADR. Do not split extension, backend or Cloudflare adapters into separate repositories.
 
 ```text
 apps/extension (Chrome MV3) -> apps/api (HTTP) -> job admission -> apps/worker
