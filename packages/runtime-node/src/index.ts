@@ -1,6 +1,6 @@
 import type { DatabaseSync } from 'node:sqlite';
 import type { StoreFixture } from '../../contracts/src/index.ts';
-import { parseV1, serializeV1, type V1Records } from '../../contracts/src/v1.ts';
+import { parseV1, serializeV1, type V1Records } from '../../contracts/src/index.ts';
 
 export function runNodeSmoke(db: DatabaseSync, migration: string, fixtures: readonly StoreFixture[]): readonly StoreFixture[] {
   db.exec(migration);

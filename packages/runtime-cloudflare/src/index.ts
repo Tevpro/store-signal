@@ -1,7 +1,6 @@
 import fixtureData from '../../../tests/fixtures/stores.json' with { type: 'json' };
 import contractData from '../../../tests/fixtures/v1-records.json' with { type: 'json' };
-import { parseV1, serializeV1 } from '../../contracts/src/v1.ts';
-import { parseFixtures } from '../../contracts/src/index.ts';
+import { parseFixtures, parseV1, serializeV1 } from '../../contracts/src/index.ts';
 
 interface Env { DB: D1Database }
 const fixtures = parseFixtures(fixtureData as unknown);
