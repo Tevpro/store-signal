@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS fixture_stores (
+  id TEXT PRIMARY KEY NOT NULL,
+  origin TEXT NOT NULL
+);

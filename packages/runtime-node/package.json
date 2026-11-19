@@ -1,0 +1,1 @@
+{"name":"@store-signal/runtime-node","version":"0.0.0","private":true,"type":"module","exports":"./src/index.ts","dependencies":{"@store-signal/contracts":"0.0.0"}}
