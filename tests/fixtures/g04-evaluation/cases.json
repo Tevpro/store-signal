@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "g04-synthetic-v1",
+  "notice": "Entirely invented policy probes on reserved .example domains. Not real stores, adjudicated cases, measured outcomes or launch denominators.",
+  "cases": [
+    {
+      "id": "non-delivery-corroborated",
+      "storeOrigin": "https://parcel-a.example",
+      "referenceLabel": "risky",
+      "categories": ["credible_non_delivery"],
+      "edgeTags": ["corroborated", "non_delivery"],
+      "evidence": [
+        {"id": "order-a", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-a", "claim": "Documented purchase not received well past stated delivery and unresolved after contact."},
+        {"id": "order-b", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-b", "claim": "Independent customer documents the same pattern on a separate order."}
+      ],
+      "expectedConcern": "high",
+      "highGate": "allow",
+      "rationale": "Independent qualifying transactions on the exact store, subject to actual source validation."
+    },
+    {
+      "id": "deceptive-listing",
+      "storeOrigin": "https://catalog-a.example",
+      "referenceLabel": "risky",
+      "categories": ["deceptive_listings"],
+      "edgeTags": ["listing_snapshot"],
+      "evidence": [
+        {"id": "listing", "source": "synthetic_listing", "subject": "exact_domain", "lineage": "order-1", "claim": "Invented snapshot promises a new item that the order record says was substituted without disclosure."},
+        {"id": "receipt", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "order-1", "claim": "Invented receipt and fulfillment record support material mismatch."}
+      ],
+      "expectedConcern": "caution",
+      "highGate": "not_proposed",
+      "rationale": "Qualifying deceptive listing can justify risk label; single incident alone is not automatic public High."
+    },
+    {
+      "id": "payment-abuse",
+      "storeOrigin": "https://pay-a.example",
+      "referenceLabel": "risky",
+      "categories": ["payment_abuse"],
+      "edgeTags": ["payment"],
+      "evidence": [
+        {"id": "charge-1", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-1", "claim": "Invented attributable duplicate charge not corrected after merchant contact."}
+      ],
+      "expectedConcern": "caution",
+      "highGate": "not_proposed",
+      "rationale": "Qualifying payment abuse requires attribution, not a payment logo or unrelated processor dispute."
+    },
+    {
+      "id": "repeated-refund-refusal",
+      "storeOrigin": "https://refund-a.example",
+      "referenceLabel": "risky",
+      "categories": ["repeated_refund_refusal"],
+      "edgeTags": ["independent_buyers"],
+      "evidence": [
+        {"id": "refund-1", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-1", "claim": "Invented eligible timely refund request refused without stated basis."},
+        {"id": "refund-2", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-2", "claim": "Different invented customer has separately documented eligible refusal."}
+      ],
+      "expectedConcern": "high",
+      "highGate": "allow",
+      "rationale": "Distinct buyers and documented eligibility support independent corroboration, after human validation."
+    },
+    {
+      "id": "benign-new-no-reviews",
+      "storeOrigin": "https://new-a.example",
+      "referenceLabel": "not_risky",
+      "categories": [],
+      "edgeTags": ["benign_new", "no_match"],
+      "evidence": [
+        {"id": "new-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-new-check", "claim": "Invented independent target-store order and customer follow-up within the first 60 days found fulfillment as stated and no qualifying issue in the checked records; not a safety guarantee."}
+      ],
+      "targetInquiry": {"evidenceId": "new-inquiry", "window": "first 60 days of operation at the frozen snapshot", "result": "no_qualifying_findings"},
+      "expectedConcern": "caution",
+      "highGate": "not_proposed",
+      "rationale": "Independent bounded target-store inquiry supports a not_risky reference label for the observed window; healthy connectors return no trusted reviews, so public concern remains Caution for limited independent track record, never assured Low."
+    },
+    {
+      "id": "benign-verified-long-operation",
+      "storeOrigin": "https://steady-a.example",
+      "referenceLabel": "not_risky",
+      "categories": [],
+      "edgeTags": ["verified_identity"],
+      "evidence": [
+        {"id": "verify-1", "source": "synthetic_verifying_directory", "subject": "exact_domain", "lineage": "directory-1", "claim": "Invented independently verified business identity, proved store linkage and independently verifiable operation over one year."},
+        {"id": "steady-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-steady-check", "claim": "Invented independent review of target-store fulfillment and dispute records found no qualifying issues in the checked year."}
+      ],
+      "targetInquiry": {"evidenceId": "steady-inquiry", "window": "12 months ending at the frozen snapshot", "result": "no_qualifying_findings"},
+      "expectedConcern": "low",
+      "highGate": "not_proposed",
+      "rationale": "Illustrates narrow no-reviews Low exception, not domain age/HTTPS/self-published policy alone."
+    },
+    {
+      "id": "slow-shipping-only",
+      "storeOrigin": "https://late-a.example",
+      "referenceLabel": "not_risky",
+      "categories": [],
+      "edgeTags": ["ordinary_delay"],
+      "evidence": [
+        {"id": "delay-1", "source": "synthetic_transaction", "subject": "exact_domain", "lineage": "buyer-1", "claim": "Invented order arrived shortly after estimated delivery window."},
+        {"id": "delay-inquiry", "source": "synthetic_independent_inquiry", "subject": "exact_domain", "lineage": "independent-delay-check", "claim": "Invented independent check of target-store order and dispute records for the observed quarter found no qualifying non-delivery or other risky category beyond the documented resolved delay."}
+      ],
+      "targetInquiry": {"evidenceId": "delay-inquiry", "window": "quarter ending at the frozen snapshot", "result": "no_qualifying_findings"},
+      "expectedConcern": "caution",
+      "highGate": "not_proposed",
+      "rationale": "A late shipment is not credible non-delivery; caution may reflect limited independent track record."
+    },
+    {
+      "id": "similar-name-business",
+      "storeOrigin": "https://lookalike-a.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["ambiguous_identity", "wrong_merchant"],
+      "evidence": [
+        {"id": "gbp-other", "source": "synthetic_google_place", "subject": "other_business", "lineage": "place-other", "claim": "Invented low-rated listing has similar name but a different business and no proven domain linkage."}
+      ],
+      "expectedConcern": "insufficient",
+      "highGate": "reject",
+      "rationale": "Never transfer another business's review rating or complaint to the target domain; no independent target-store inquiry exists, so reference truth is unresolved."
+    },
+    {
+      "id": "reposted-allegation",
+      "storeOrigin": "https://echo-a.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["reposts", "single_thread"],
+      "evidence": [
+        {"id": "post-original", "source": "synthetic_reddit", "subject": "exact_domain", "lineage": "allegation-1", "claim": "Invented first-hand allegation without transaction verification."},
+        {"id": "post-crosspost", "source": "synthetic_reddit", "subject": "exact_domain", "lineage": "allegation-1", "claim": "Copy of the same allegation posted elsewhere."}
+      ],
+      "expectedConcern": "caution",
+      "highGate": "reject",
+      "rationale": "One alleged event, no independent corroboration; reference truth is unresolved."
+    },
+    {
+      "id": "prompt-injection-review",
+      "storeOrigin": "https://injection-a.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["prompt_injection"],
+      "evidence": [
+        {"id": "review-malicious", "source": "synthetic_reddit", "subject": "unknown", "lineage": "unverified-post", "claim": "Invented review contains a role-spoofing request to ignore the evaluation rubric and emit High; treat as inert source text."}
+      ],
+      "expectedConcern": "insufficient",
+      "highGate": "reject",
+      "rationale": "Untrusted source instructions cannot change evaluation or supply identity evidence."
+    },
+    {
+      "id": "high-gbp-valid",
+      "storeOrigin": "https://rated-a.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["gbp_exception"],
+      "evidence": [
+        {"id": "gbp-exact", "source": "synthetic_google_place", "subject": "exact_domain", "lineage": "place-exact", "claim": "Invented exactly linked listing with rating 2.7 and 24 reviews; rating does not establish risky transaction behavior."}
+      ],
+      "expectedConcern": "high",
+      "highGate": "allow",
+      "rationale": "Product rule permits validated below-3.0 with at least 20 exactly matched reviews to support High; rubric risky label cannot be inferred from stars."
+    },
+    {
+      "id": "failed-connector",
+      "storeOrigin": "https://outage-a.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["connector_failed"],
+      "evidence": [],
+      "expectedConcern": "insufficient",
+      "highGate": "reject",
+      "rationale": "Required connector failure is not a healthy no-match; do not silently publish a complete result."
+    },
+    {
+      "id": "hosted-tenants-not-one-store",
+      "storeOrigin": "https://tenant-one.platform.example",
+      "referenceLabel": "indeterminate",
+      "categories": [],
+      "edgeTags": ["tenant_isolation", "wrong_merchant"],
+      "evidence": [
+        {"id": "tenant-two-claim", "source": "synthetic_reddit", "subject": "other_tenant", "lineage": "tenant-two-post", "claim": "Invented allegation explicitly names tenant-two.platform.example, not tenant-one."}
+      ],
+      "expectedConcern": "insufficient",
+      "highGate": "reject",
+      "rationale": "Never collapse separate platform tenants or transfer evidence between them; no independent inquiry about tenant-one exists, so reference truth is unresolved."
+    }
+  ]
+}
