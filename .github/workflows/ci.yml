@@ -47,5 +47,15 @@ jobs:
         run: npm run smoke:quota:worker
       - name: Wrangler-local Worker/D1 check/status HTTP smoke
         run: npm run smoke:check:worker
+      - name: Extension lint
+        run: npm run lint --prefix apps/extension
+      - name: Extension strict typecheck
+        run: npm run typecheck --prefix apps/extension
+      - name: Extension unit and Node/SQLite integration tests
+        run: npm test --prefix apps/extension
+      - name: Extension build (unpacked MV3 only)
+        run: npm run build --prefix apps/extension
+      - name: Extension Wrangler-local Worker/D1 integration smoke
+        run: node --import tsx apps/extension/tests/worker-smoke.ts
       - name: Audit production dependencies
         run: npm audit --omit=dev

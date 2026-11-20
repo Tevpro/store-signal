@@ -1,0 +1,1 @@
+{"name":"@store-signal/extension","private":true,"type":"module","scripts":{"lint":"tsc -p tsconfig.json --noEmit && git diff --check","typecheck":"tsc -p tsconfig.json --noEmit","test":"npm run build && node --import tsx --test tests/*.test.ts","mock":"node --import tsx tests/fixtures/run-mock.ts","build":"tsc -p tsconfig.json && node scripts/copy-assets.mjs"}}
