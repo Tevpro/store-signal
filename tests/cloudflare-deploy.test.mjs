@@ -48,6 +48,11 @@ test('read-only Cloudflare checks require matching existing D1 and Worker secret
   await assert.rejects(checkRemote(manifest, env, async () => ({ok:false})), /read-only/);
   await assert.rejects(checkRemote(manifest, env, async () => ({ok:true, json:async () => ({success:true, result:[]})})), /D1 UUID/);
 });
+test('ordinary PR CI executes deployment guard suite before any merge', async () => {
+  const ci = await readFile('.github/workflows/ci.yml', 'utf8');
+  assert.match(ci, /pull_request:/);
+  assert.match(ci, /Cloudflare deployment guard tests \(no deployment\)[\s\S]*run: node --test tests\/cloudflare-deploy\.test\.mjs/);
+});
 test('workflow is manual-only, least privilege, pinned and protected', async () => {
   const yaml = await readFile('.github/workflows/deploy-cloudflare.yml', 'utf8');
   assert.match(yaml, /^on:\n  workflow_dispatch:/m);

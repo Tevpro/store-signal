@@ -31,6 +31,8 @@ jobs:
         run: npm run typecheck
       - name: Tests
         run: npm test
+      - name: Cloudflare deployment guard tests (no deployment)
+        run: node --test tests/cloudflare-deploy.test.mjs
       - name: Build (Worker dry-run only)
         run: npm run build
       - name: Node/SQLite smoke
