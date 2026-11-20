@@ -45,5 +45,7 @@ jobs:
         run: npm run smoke:admission:worker
       - name: Wrangler-local Worker/D1 quota smoke
         run: npm run smoke:quota:worker
+      - name: Wrangler-local Worker/D1 check/status HTTP smoke
+        run: npm run smoke:check:worker
       - name: Audit production dependencies
         run: npm audit --omit=dev
