@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       commit_sha:
-        description: 'Exact reviewed 40-character commit SHA on main'
+        description: "Exact reviewed 40-character commit SHA on main"
         required: true
         type: string
       confirmation:
-        description: 'Type deploy followed by a space and that exact SHA'
+        description: "Type deploy followed by a space and that exact SHA"
         required: true
         type: string
 

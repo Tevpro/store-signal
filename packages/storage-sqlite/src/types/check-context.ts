@@ -1,4 +1,4 @@
-import type { QuotaScope } from './quota-scope.ts';
+import type { QuotaScope } from "./quota-scope.ts";
 
 /** Trusted ingress context only; never populate from shopper-controlled headers. */
 export interface CheckContext {

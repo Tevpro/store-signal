@@ -12,6 +12,7 @@ Planned evidence-backed assessments of unfamiliar online stores. **Only a local,
 - [PR review and delivery gate](docs/review-and-delivery.md)
 - [Delivery phases and dependencies](docs/roadmap.md)
 - [Decisions and unresolved questions](docs/decisions.md)
+- [Local CI gates and explicit limitations](docs/ci-gates.md)
 - [Contributing](CONTRIBUTING.md) | [Security](SECURITY.md)
 
 ## Work ledgers
