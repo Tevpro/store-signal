@@ -24,4 +24,4 @@
 
 ## Dependencies and release
 
-Pin package manager/runtime versions and commit lockfile when implementation begins. Prefer audited dependencies compatible with both Workers and Node for shared packages; verify rather than assuming Node compatibility. Keep generated code and fixtures documented. Use small explicit migrations and rollback notes. License selection remains open; do not add a guessed LICENSE or copy third-party material into this public repository.
+Pin package manager/runtime versions and commit lockfile when implementation begins. Prefer audited dependencies compatible with both Workers and Node for shared packages; verify rather than assuming Node compatibility. Keep generated code and fixtures documented. Use small explicit migrations and rollback notes. Apache-2.0 is the recorded choice for Tevpro-owned code, but the LICENSE remains in a draft/unmerged PR pending ownership/authority and provenance verification; do not treat the public repo as an effective grant, change the selected scope, or copy third-party material into it.
