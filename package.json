@@ -15,6 +15,7 @@
     "smoke:persistence:worker": "node --import tsx tests/smoke-persistence-worker.ts",
     "smoke:admission:worker": "node --import tsx tests/smoke-admission-worker.ts",
     "smoke:quota:worker": "node --import tsx tests/smoke-quota-worker.ts",
+    "smoke:check:worker": "node --import tsx tests/smoke-check-worker.ts",
     "lint": "tsc --noEmit && git diff --check"
   },
   "devDependencies": {"@cloudflare/workers-types":"5.20261118.1", "@types/node":"26.6.6", "tsx":"4.23.15", "typescript":"5.9.3", "wrangler":"4.164.0"}
