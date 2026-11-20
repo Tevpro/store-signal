@@ -1,1 +1,9 @@
-{"name":"@store-signal/runtime-cloudflare","version":"0.0.0","private":true,"type":"module","dependencies":{"@store-signal/contracts":"0.0.0"}}
+{
+  "name": "@store-signal/runtime-cloudflare",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@store-signal/contracts": "0.0.0"
+  }
+}

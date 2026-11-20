@@ -4,8 +4,13 @@
   "type": "module",
   "version": "0.0.0",
   "packageManager": "npm@12.2.3",
-  "engines": { "node": "26.7.0", "npm": "12.2.3" },
-  "workspaces": ["packages/*"],
+  "engines": {
+    "node": "26.7.0",
+    "npm": "12.2.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
@@ -16,7 +21,19 @@
     "smoke:admission:worker": "node --import tsx tests/smoke-admission-worker.ts",
     "smoke:quota:worker": "node --import tsx tests/smoke-quota-worker.ts",
     "smoke:check:worker": "node --import tsx tests/smoke-check-worker.ts",
-    "lint": "tsc --noEmit && git diff --check"
+    "lint": "eslint packages tests scripts eslint.config.js && git diff --check",
+    "format:check": "prettier --check 'packages/**/*.{ts,json,jsonc}' 'tests/**/*.{ts,mjs,json,jsonc}' 'scripts/**/*.{js,mjs}' '.github/workflows/*.{yml,yaml}' package.json eslint.config.js tsconfig.json tsconfig.build.json docs/ci-gates.md",
+    "format": "prettier --write 'packages/**/*.{ts,json,jsonc}' 'tests/**/*.{ts,mjs,json,jsonc}' 'scripts/**/*.{js,mjs}' '.github/workflows/*.{yml,yaml}' package.json eslint.config.js tsconfig.json tsconfig.build.json docs/ci-gates.md"
   },
-  "devDependencies": {"@cloudflare/workers-types":"5.20261118.1", "@types/node":"26.6.6", "tsx":"4.23.15", "typescript":"5.9.3", "wrangler":"4.164.0"}
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261118.1",
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
+    "eslint": "10.15.0",
+    "prettier": "3.10.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0",
+    "wrangler": "4.164.0"
+  }
 }
