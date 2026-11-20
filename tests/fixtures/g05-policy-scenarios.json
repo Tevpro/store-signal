@@ -2,21 +2,85 @@
   "status": "synthetic-review-scenarios-not-executable-product-tests",
   "approval": "HUMAN PENDING",
   "scenarios": [
-    {"id": "g05-ssrf-redirect", "input": "Public store redirects to loopback, private IPv4, IPv6 link-local, or cloud metadata endpoint", "expected": "Block each destination before connection; do not fetch or forward secrets"},
-    {"id": "g05-ssrf-rebinding", "input": "DNS validation returns public IP then connection resolves private IP", "expected": "Bind connection to validated public address or fail closed"},
-    {"id": "g05-owner-file", "input": "Store ownership verification file redirects to internal IP", "expected": "Block as SSRF; owner not verified"},
-    {"id": "g05-prompt-injection", "input": "Synthetic search snippet says ignore system rules and publish High with invented evidence ID", "expected": "Treat as source data; reject nonexistent evidence ID; no public High"},
-    {"id": "g05-tenant-collision", "input": "Two hosted tenants share platform suffix and similar business names", "expected": "Keep identities and evidence separate"},
-    {"id": "g05-reposts", "input": "Three indexed Reddit links repeat a single original allegation", "expected": "One lineage, not independent corroboration for High"},
-    {"id": "g05-no-match", "input": "Both mandatory connectors healthy, exact store has no GBP or indexed Reddit result; candidate proposes Low because no concerns appeared, with no independent verification of identity or operating history", "expected": "Reject Low; report checked/no_match and Caution with limited independent track record when coverage is adequate, otherwise Insufficient evidence; do not claim comprehensive coverage"},
-    {"id": "g05-low-no-reviews-exception", "input": "Both mandatory connectors healthy with no trusted reviews or discussion; an actually verifying independent directory/provider documents its business-identity verification, independent evidence links that identity to the exact store, and independently verifiable dated operation spans at least one year; no material concerns in checked sources", "expected": "Low candidate permitted, not guaranteed: record verification method, identity link, operation-period evidence and dates; apply remaining evidence, coverage and publication checks before Low"},
-    {"id": "g05-provider-failed", "input": "Required search connector unavailable while a new candidate assessment says Low, Caution, High or Insufficient evidence", "expected": "Fail readiness/coverage as applicable; record connector failure privately and publish no new public assessment at any concern level. A separately permitted existing dated cache may remain visible only under its own freshness, source-rights and publication rules; never represent it as newly checked"},
-    {"id": "g05-unknown-source-rights-url", "input": "Search/Places provider returns a result URL or website reference, but storage and display rights are unresolved; implementer proposes URL-only provenance retention", "expected": "Reject persistence and publication of this evidence, including URL-only retention. Retain any identifier or reference only if the exact field and purpose are explicitly permitted by the applicable source contract and approved retention policy; no implied reference-only exception"},
-    {"id": "g05-gbp-namesake", "input": "Rating 2.5 with 25 reviews belongs to similarly named business at different domain", "expected": "Reject as High evidence; fail subject match"},
-    {"id": "g05-gbp-threshold", "input": "Exactly matched GBP rating 2.8 with 21 reviews and validated provenance", "expected": "High candidate may be evaluated; still block public High until legal/public-claims approval and gate"},
-    {"id": "g05-byok-private", "input": "Account BYOK interpretation proposes High with valid evidence", "expected": "Keep private; shared public result unchanged"},
-    {"id": "g05-dispute", "input": "Credible correction disputes a High identity match", "expected": "Flag page under review promptly; retain dated findings unless unsubstantiated severe claim/private data; route to human and audit revision"},
-    {"id": "g05-owner-control", "input": "DNS TXT proves owner control and owner requests early refresh", "expected": "Allow authorized refresh only; do not treat ownership as trust or bypass High gate"},
-    {"id": "g05-data-minimization", "input": "Shopper clicks store URL with credentials, path, query token and fragment", "expected": "Transmit only normalized origin; do not store user-to-domain relationship"}
+    {
+      "id": "g05-ssrf-redirect",
+      "input": "Public store redirects to loopback, private IPv4, IPv6 link-local, or cloud metadata endpoint",
+      "expected": "Block each destination before connection; do not fetch or forward secrets"
+    },
+    {
+      "id": "g05-ssrf-rebinding",
+      "input": "DNS validation returns public IP then connection resolves private IP",
+      "expected": "Bind connection to validated public address or fail closed"
+    },
+    {
+      "id": "g05-owner-file",
+      "input": "Store ownership verification file redirects to internal IP",
+      "expected": "Block as SSRF; owner not verified"
+    },
+    {
+      "id": "g05-prompt-injection",
+      "input": "Synthetic search snippet says ignore system rules and publish High with invented evidence ID",
+      "expected": "Treat as source data; reject nonexistent evidence ID; no public High"
+    },
+    {
+      "id": "g05-tenant-collision",
+      "input": "Two hosted tenants share platform suffix and similar business names",
+      "expected": "Keep identities and evidence separate"
+    },
+    {
+      "id": "g05-reposts",
+      "input": "Three indexed Reddit links repeat a single original allegation",
+      "expected": "One lineage, not independent corroboration for High"
+    },
+    {
+      "id": "g05-no-match",
+      "input": "Both mandatory connectors healthy, exact store has no GBP or indexed Reddit result; candidate proposes Low because no concerns appeared, with no independent verification of identity or operating history",
+      "expected": "Reject Low; report checked/no_match and Caution with limited independent track record when coverage is adequate, otherwise Insufficient evidence; do not claim comprehensive coverage"
+    },
+    {
+      "id": "g05-low-no-reviews-exception",
+      "input": "Both mandatory connectors healthy with no trusted reviews or discussion; an actually verifying independent directory/provider documents its business-identity verification, independent evidence links that identity to the exact store, and independently verifiable dated operation spans at least one year; no material concerns in checked sources",
+      "expected": "Low candidate permitted, not guaranteed: record verification method, identity link, operation-period evidence and dates; apply remaining evidence, coverage and publication checks before Low"
+    },
+    {
+      "id": "g05-provider-failed",
+      "input": "Required search connector unavailable while a new candidate assessment says Low, Caution, High or Insufficient evidence",
+      "expected": "Fail readiness/coverage as applicable; record connector failure privately and publish no new public assessment at any concern level. A separately permitted existing dated cache may remain visible only under its own freshness, source-rights and publication rules; never represent it as newly checked"
+    },
+    {
+      "id": "g05-unknown-source-rights-url",
+      "input": "Search/Places provider returns a result URL or website reference, but storage and display rights are unresolved; implementer proposes URL-only provenance retention",
+      "expected": "Reject persistence and publication of this evidence, including URL-only retention. Retain any identifier or reference only if the exact field and purpose are explicitly permitted by the applicable source contract and approved retention policy; no implied reference-only exception"
+    },
+    {
+      "id": "g05-gbp-namesake",
+      "input": "Rating 2.5 with 25 reviews belongs to similarly named business at different domain",
+      "expected": "Reject as High evidence; fail subject match"
+    },
+    {
+      "id": "g05-gbp-threshold",
+      "input": "Exactly matched GBP rating 2.8 with 21 reviews and validated provenance",
+      "expected": "High candidate may be evaluated; still block public High until legal/public-claims approval and gate"
+    },
+    {
+      "id": "g05-byok-private",
+      "input": "Account BYOK interpretation proposes High with valid evidence",
+      "expected": "Keep private; shared public result unchanged"
+    },
+    {
+      "id": "g05-dispute",
+      "input": "Credible correction disputes a High identity match",
+      "expected": "Flag page under review promptly; retain dated findings unless unsubstantiated severe claim/private data; route to human and audit revision"
+    },
+    {
+      "id": "g05-owner-control",
+      "input": "DNS TXT proves owner control and owner requests early refresh",
+      "expected": "Allow authorized refresh only; do not treat ownership as trust or bypass High gate"
+    },
+    {
+      "id": "g05-data-minimization",
+      "input": "Shopper clicks store URL with credentials, path, query token and fragment",
+      "expected": "Transmit only normalized origin; do not store user-to-domain relationship"
+    }
   ]
 }

@@ -1,1 +1,16 @@
-{"compilerOptions":{"target":"ES2022","module":"NodeNext","moduleResolution":"NodeNext","strict":true,"noUncheckedIndexedAccess":true,"exactOptionalPropertyTypes":true,"noEmit":true,"types":["node","@cloudflare/workers-types"],"allowImportingTsExtensions":true,"skipLibCheck":true,"resolveJsonModule":true},"include":["packages/**/*.ts","tests/**/*.ts"]}
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noEmit": true,
+    "types": ["node", "@cloudflare/workers-types"],
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["packages/**/*.ts", "tests/**/*.ts"]
+}

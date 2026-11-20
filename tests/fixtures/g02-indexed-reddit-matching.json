@@ -2,7 +2,11 @@
   "description": "Synthetic G02 discovery cases only; not provider responses or executable production matcher",
   "stores": [
     { "id": "independent", "origin": "https://shop-a.example" },
-    { "id": "tenant-a", "origin": "https://a.platform.example", "tenantKey": "a" }
+    {
+      "id": "tenant-a",
+      "origin": "https://a.platform.example",
+      "tenantKey": "a"
+    }
   ],
   "cases": [
     {
@@ -73,7 +77,11 @@
       "id": "healthy-nonempty-all-rejected",
       "store": "independent",
       "providerStatus": 200,
-      "resultCaseIds": ["substring-host-trap", "similar-name", "reddit-lookalike"],
+      "resultCaseIds": [
+        "substring-host-trap",
+        "similar-name",
+        "reddit-lookalike"
+      ],
       "expectedCoverage": "no_match"
     },
     {

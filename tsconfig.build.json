@@ -1,1 +1,14 @@
-{"extends":"./tsconfig.json","compilerOptions":{"noEmit":false,"rewriteRelativeImportExtensions":true,"outDir":"dist","rootDir":"packages"},"include":["packages/contracts/src/**/*.ts","packages/runtime-node/src/**/*.ts"],"exclude":["tests","packages/runtime-cloudflare"]}
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rewriteRelativeImportExtensions": true,
+    "outDir": "dist",
+    "rootDir": "packages"
+  },
+  "include": [
+    "packages/contracts/src/**/*.ts",
+    "packages/runtime-node/src/**/*.ts"
+  ],
+  "exclude": ["tests", "packages/runtime-cloudflare"]
+}

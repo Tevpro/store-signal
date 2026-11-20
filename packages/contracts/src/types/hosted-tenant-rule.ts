@@ -1,1 +1,4 @@
-export interface HostedTenantRule { readonly platformDomain: string; readonly tenantLabels: number }
+export interface HostedTenantRule {
+  readonly platformDomain: string;
+  readonly tenantLabels: number;
+}
