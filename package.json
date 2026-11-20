@@ -12,6 +12,7 @@
     "build": "tsc -p tsconfig.build.json && wrangler deploy --dry-run --config packages/runtime-cloudflare/wrangler.jsonc",
     "smoke:node": "node --import tsx tests/smoke-node.ts",
     "smoke:worker": "node --import tsx tests/smoke-worker.ts",
+    "smoke:persistence:worker": "node --import tsx tests/smoke-persistence-worker.ts",
     "lint": "tsc --noEmit && git diff --check"
   },
   "devDependencies": {"@cloudflare/workers-types":"5.20261118.1", "@types/node":"26.6.6", "tsx":"4.23.15", "typescript":"5.9.3", "wrangler":"4.164.0"}
