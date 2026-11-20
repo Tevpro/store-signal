@@ -1,0 +1,31 @@
+import { chromium } from 'playwright-core';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { startSyntheticApi } from './mock-api.ts';
+const binary = process.env.CHROMIUM_PATH;
+if (!binary) throw new Error('Set CHROMIUM_PATH');
+const profile = mkdtempSync(join(tmpdir(), 'storesignal-chrome-'));
+const extension = resolve('apps/extension/dist');
+const mock = await startSyntheticApi();
+let browser;
+try {
+  browser = await chromium.launchPersistentContext(profile, { executablePath: binary, headless: true, args: [`--disable-extensions-except=${extension}`, `--load-extension=${extension}`, '--no-sandbox'] });
+  const id = [...createHash('sha256').update(extension).digest().subarray(0, 16)].map(byte => String.fromCharCode(97 + (byte >> 4), 97 + (byte & 15))).join('');
+  const tab = await browser.newPage();
+  await tab.goto('https://example.com', { waitUntil: 'domcontentloaded' });
+  const popup = await browser.newPage();
+  await popup.goto(`chrome-extension://${id}/popup.html`);
+  popup.on('pageerror', error => console.error('POPUP ERROR', error.message));
+  popup.on('console', message => console.log('POPUP LOG', message.text()));
+  await popup.locator('#mode').selectOption('self');
+  await popup.locator('#endpoint').fill(mock.endpoint);
+  const before = [...mock.received];
+  if (before.length) throw new Error('Passive network request before click');
+  await popup.locator('#check').click();
+  await popup.waitForTimeout(2000);
+  const display = await popup.locator('#result').innerText();
+  console.log(JSON.stringify({ extensionId: id, popup: display, requests: mock.received }));
+  if (display === 'Checking…') throw new Error('Headless Chromium did not resolve optional-host permission prompt; manual permission smoke required');
+} finally { await browser?.close(); await mock.close(); rmSync(profile, { recursive: true, force: true }); }

@@ -1,0 +1,3 @@
+import { cpSync, mkdirSync } from 'node:fs';
+mkdirSync(new URL('../dist/', import.meta.url), { recursive: true });
+for (const name of ['manifest.json', 'popup.html']) cpSync(new URL(`../${name}`, import.meta.url), new URL(`../dist/${name}`, import.meta.url));
