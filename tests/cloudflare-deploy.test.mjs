@@ -53,6 +53,12 @@ test('ordinary PR CI executes deployment guard suite before any merge', async ()
   assert.match(ci, /pull_request:/);
   assert.match(ci, /Cloudflare deployment guard tests \(no deployment\)[\s\S]*run: node --test tests\/cloudflare-deploy\.test\.mjs/);
 });
+test('ordinary PR CI runs actual Wrangler-local admission and quota smokes', async () => {
+  const ci = await readFile('.github/workflows/ci.yml', 'utf8');
+  assert.match(ci, /pull_request:/);
+  for (const name of ['admission', 'quota'])
+    assert.match(ci, new RegExp(`^        run: npm run smoke:${name}:worker$`, 'm'));
+});
 test('workflow is manual-only, least privilege, pinned and protected', async () => {
   const yaml = await readFile('.github/workflows/deploy-cloudflare.yml', 'utf8');
   assert.match(yaml, /^on:\n  workflow_dispatch:/m);
