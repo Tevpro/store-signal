@@ -37,5 +37,7 @@ jobs:
         run: npm run smoke:node
       - name: Wrangler-local Worker/D1 smoke
         run: npm run smoke:worker
+      - name: Wrangler-local Worker/D1 persistence smoke
+        run: npm run smoke:persistence:worker
       - name: Audit production dependencies
         run: npm audit --omit=dev
