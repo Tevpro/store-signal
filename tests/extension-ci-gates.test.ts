@@ -15,5 +15,8 @@ test("CI runs extension gates and dual-runtime integration against the merged AP
     assert.ok(workflow.includes(`run: ${command}`), `missing ${command}`);
   }
   assert.match(workflow, /run: npm run smoke:check:worker/);
-  assert.match(readFileSync("apps/extension/tests/extension.test.ts", "utf8"), /check-responses\.json/);
+  assert.match(
+    readFileSync("apps/extension/tests/extension.test.ts", "utf8"),
+    /check-responses\.json/,
+  );
 });
