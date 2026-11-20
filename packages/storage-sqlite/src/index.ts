@@ -10,6 +10,9 @@ export interface SqlPort {
 export interface InvestigationJob { id: string; storeId: string; state: 'checking' | 'complete' | 'failed'; createdAt: string }
 export interface Correction { id: string; storeId: string; summary: string; createdAt: string }
 const statement = (sql: string, ...params: Param[]): Statement => ({ sql, params });
+// SQLite TEXT order is wrong when seconds and fractional seconds are mixed:
+// `...00.500Z` sorts before `...00Z`. Persist one UTC precision for expiry.
+const expiry = (value: string): string => new Date(utc(value)).toISOString();
 // Wire /v1 readers tolerate additive fields; persisted records deliberately allowlist
 // fields so provider review bodies, credentials and arbitrary shopper data cannot sneak in.
 const identityJson = (v: StoreIdentity) => JSON.stringify({ schemaVersion: 1, storeId: v.storeId, origin: v.origin, registrableDomain: v.registrableDomain, ...(v.tenantKey ? { tenantKey: v.tenantKey } : {}), matchExplanation: v.matchExplanation });
@@ -53,7 +56,7 @@ export function createStorage(port: SqlPort) {
         ...evidence.map((record) => statement('INSERT INTO evidence_refs(job_id,id,store_id,retrieved_at,payload) VALUES (?,?,?,?,?)', job.id, record.id, record.storeId, record.retrievedAt, evidenceJson(record))),
       ];
       if (assessment) {
-        writes.push(statement('INSERT INTO assessments(job_id,id,store_id,expires_at,payload) VALUES (?,?,?,?,?)', job.id, assessment.id, assessment.storeId, assessment.expiresAt, assessmentJson(assessment)));
+        writes.push(statement('INSERT INTO assessments(job_id,id,store_id,expires_at,payload) VALUES (?,?,?,?,?)', job.id, assessment.id, assessment.storeId, expiry(assessment.expiresAt), assessmentJson(assessment)));
         for (const id of assessment.evidenceIds) writes.push(statement('INSERT INTO assessment_evidence(job_id,evidence_id,store_id) VALUES (?,?,?)', job.id, id, assessment.storeId));
       }
       await port.batch(writes);
@@ -86,7 +89,13 @@ export function createStorage(port: SqlPort) {
         const [known] = await port.query('SELECT id FROM evidence_refs WHERE id=? AND store_id=? LIMIT 1', [evidenceId, analysis.storeId]);
         if (!known) throw new Error('foreign evidence in private analysis');
       }
-      await port.batch([statement('INSERT INTO private_analyses(account_id,id,store_id,expires_at,payload) VALUES (?,?,?,?,?)', accountId, analysis.id, analysis.storeId, analysis.expiresAt, assessmentJson(analysis))]);
+      await port.batch([
+        statement('INSERT INTO private_analyses(account_id,id,store_id,expires_at,payload) VALUES (?,?,?,?,?)', accountId, analysis.id, analysis.storeId, expiry(analysis.expiresAt), assessmentJson(analysis)),
+        ...analysis.evidenceIds.map((evidenceId) => statement(
+          'INSERT INTO private_analysis_evidence(account_id,analysis_id,job_id,evidence_id,store_id) VALUES (?,?,(SELECT job_id FROM evidence_refs WHERE id=? AND store_id=? ORDER BY job_id LIMIT 1),?,?)',
+          accountId, analysis.id, evidenceId, analysis.storeId, evidenceId, analysis.storeId,
+        )),
+      ]);
     },
     async getPrivateAnalysis(accountId: string, id: string): Promise<Assessment | null> {
       const [row] = await port.query('SELECT payload FROM private_analyses WHERE account_id=? AND id=?', [text(accountId, 'account id'), text(id, 'analysis id')]);
@@ -101,9 +110,12 @@ export function createStorage(port: SqlPort) {
     },
     /** Explicit purge: caller supplies controlled clock; corrections retained for human policy. */
     async prune(now: string): Promise<void> {
-      const at = utc(now);
+      const at = expiry(now);
       await port.batch([
-        statement('DELETE FROM private_analyses WHERE expires_at <= ?', at),
+        statement(`DELETE FROM private_analyses WHERE expires_at <= ? OR EXISTS (
+          SELECT 1 FROM private_analysis_evidence AS link JOIN assessments AS result ON result.job_id=link.job_id
+          WHERE link.account_id=private_analyses.account_id AND link.analysis_id=private_analyses.id AND result.expires_at <= ?
+        )`, at, at),
         statement('DELETE FROM investigation_jobs WHERE id IN (SELECT job_id FROM assessments WHERE expires_at <= ?)', at),
       ]);
     },

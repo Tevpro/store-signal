@@ -35,5 +35,14 @@ CREATE TABLE IF NOT EXISTS private_analyses (
   expires_at TEXT NOT NULL, payload TEXT NOT NULL CHECK (json_valid(payload)),
   PRIMARY KEY (account_id, id)
 );
+-- A live private analysis must never outlive the evidence it cites. These
+-- references make a save racing with retention fail atomically, not orphan it.
+CREATE TABLE IF NOT EXISTS private_analysis_evidence (
+  account_id TEXT NOT NULL, analysis_id TEXT NOT NULL,
+  job_id TEXT NOT NULL, evidence_id TEXT NOT NULL, store_id TEXT NOT NULL,
+  PRIMARY KEY (account_id, analysis_id, evidence_id),
+  FOREIGN KEY (account_id, analysis_id) REFERENCES private_analyses(account_id, id) ON DELETE CASCADE,
+  FOREIGN KEY (job_id, evidence_id, store_id) REFERENCES evidence_refs(job_id, id, store_id) ON DELETE RESTRICT
+);
 CREATE INDEX IF NOT EXISTS idx_assessments_expiry ON assessments(expires_at);
 CREATE INDEX IF NOT EXISTS idx_private_expiry ON private_analyses(expires_at);

@@ -79,6 +79,12 @@ try {
     foreignDelete: false, secondAccountDelete: true,
     ownerPrivate: { ...assessment, id: 'worker-private', aiMode: 'byok', publicationStatus: 'draft' },
   });
+  assert.deepEqual(await request('POST', '/persistence-retention-smoke'), {
+    survivedEarlyPrune: true, investigation: null, privateAnalysis: null, links: 0, violations: 0,
+  });
+  assert.deepEqual(await request('POST', '/persistence-race-smoke'), {
+    rejected: true, orphan: null, violations: 0,
+  });
   assert.deepEqual(await request('DELETE'), { investigation: null, ownerPrivate: null });
   await stop();
   const check = execFileSync(bin, ['d1', 'execute', 'store-signal-local-fixtures', '--local', '--config', config, '--persist-to', dir, '--command', "SELECT (SELECT count(*) FROM fixture_stores WHERE id='prior') AS prior, (SELECT count(*) FROM evidence_refs) AS evidence, (SELECT count(*) FROM pragma_foreign_key_check) AS violations"], { encoding: 'utf8' });
