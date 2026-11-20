@@ -13,7 +13,7 @@ Keith has since delegated routine source-PR approval to Cassandra's explicit aut
 
 ## Review peer access checkpoint
 
-When this rule was introduced, the configured HTTPS Agent Card fetch and authenticated A2A client failed with connection refused. On November 18, 2026, after Keith reported restoration, the Agent Card returned HTTP 200 and authenticated A2A context `ctx-f4277440df244f3e` completed: Cassandra confirmed that the PR #32 review comment was hers and identified her GitHub publishing account as `tevnull`. That account also authored #32, so her substantive assessment does **not** satisfy independent GitHub code-owner approval. Future outages leave reviews pending; do not weaken TLS/auth or infer approval from transport alone.
+When this rule was introduced, the configured HTTPS Agent Card fetch and authenticated A2A client failed with connection refused. On November 18, 2026, after Keith reported restoration, the Agent Card returned HTTP 200 and authenticated A2A context `ctx-f4277440df244f3e` completed: Cassandra confirmed that the PR #32 review comment was hers and identified her GitHub publishing account as `tevnull`. That account also authored #32, so her substantive assessment did **not**, under the *former* rule, satisfy independent GitHub code-owner approval. Keith's later delegation above supersedes that extra routine source-merge requirement; it does not waive a GitHub-enforced review or unresolved formal change request. Future outages leave reviews pending; do not weaken TLS/auth or infer approval from transport alone.
 
 ## Working-app completion evidence
 
