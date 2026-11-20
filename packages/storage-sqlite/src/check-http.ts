@@ -1,16 +1,10 @@
 import { normalizeStoreIdentity, parseV1, type Assessment } from '../../contracts/src/index.ts';
 import { createAdmission } from './admission.ts';
 import { reserveCheck } from './check-idempotency.ts';
-import { createQuotas, type QuotaScope } from './quota.ts';
+import { createQuotas } from './quota.ts';
 import type { SqlPort } from './index.ts';
-
-/** Only construct this from authenticated/ingress-controlled server context, not HTTP headers. */
-export interface CheckContext {
-  readonly scope: QuotaScope;
-  readonly enabled: boolean; // true only when a real durable dispatcher and licensed connectors are configured
-  readonly statusTokenKey?: string; // trusted high-entropy, stable server secret; never shopper-supplied
-  readonly now: () => number;
-}
+import type { CheckContext } from './types/check-context.ts';
+export type { CheckContext } from './types/check-context.ts';
 const json = (body: object, status = 200, retry?: number): Response => Response.json(body, {
   status, headers: {'Cache-Control':'no-store', ...(retry ? {'Retry-After': String(retry)} : {})},
 });
