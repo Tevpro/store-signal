@@ -33,6 +33,32 @@ test('shared /v1 fixtures parse and render without inventing safety verdicts', (
   assert.doesNotMatch(renderResult(escaped), /<script>/);
 });
 
+test('assessment enums require real strings, not coercible JSON values', () => {
+  for (const field of ['concern', 'confidence'] as const) {
+    for (const invalid of [['high'], { value: 'high' }, null]) {
+      assert.throws(() => parseResult({ ...fixtures.complete, assessment: { ...fixtures.complete.assessment, [field]: invalid } }), /Invalid assessment/);
+    }
+  }
+  const valid = parseResult({ ...fixtures.complete, assessment: { ...fixtures.complete.assessment, concern: 'high', confidence: 'medium' } });
+  assert.equal(valid.status, 'complete');
+  assert.match(renderResult(valid), /High concern/);
+  assert.match(renderResult(valid), /Confidence: medium/);
+});
+
+test('terminal polls correlate check IDs before returning cached or complete results', async () => {
+  const initial = parseResult(fixtures.checking);
+  assert.equal(initial.status, 'checking');
+  for (const status of ['complete', 'cached'] as const) {
+    const matching = { ...fixtures.complete, status, checkId: fixtures.checking.checkId };
+    const result = await pollCheck(initial, 'http://localhost:8787/v1/', async () => json(matching), async () => {}, 1);
+    assert.equal(result.status, status);
+    await assert.rejects(
+      () => pollCheck(initial, 'http://localhost:8787/v1/', async () => json({ ...matching, checkId: 'different' }), async () => {}, 1),
+      /status identity/,
+    );
+  }
+});
+
 test('POST and bounded GET poll send only normalized identity with omitted credentials', async () => {
   const calls: string[] = [];
   const request = async (url: string, init: RequestInit) => {

@@ -15,7 +15,7 @@ export function parseResult(value: unknown): CheckResult {
   if (value.status === 'unsupported' && text(value.reason)) return {status:'unsupported',reason:value.reason};
   if ((value.status === 'cached' || value.status === 'complete') && checkId(value.checkId) && record(value.assessment)) {
     const a = value.assessment;
-    if (!['low','caution','high','insufficient'].includes(String(a.concern)) || !['low','medium','high','insufficient'].includes(String(a.confidence)) || !date(a.checkedAt) || !Array.isArray(a.sources) || a.sources.length > 20 || typeof a.limited !== 'boolean') throw new Error('Invalid assessment');
+    if (typeof a.concern !== 'string' || !['low','caution','high','insufficient'].includes(a.concern) || typeof a.confidence !== 'string' || !['low','medium','high','insufficient'].includes(a.confidence) || !date(a.checkedAt) || !Array.isArray(a.sources) || a.sources.length > 20 || typeof a.limited !== 'boolean') throw new Error('Invalid assessment');
     const sources = a.sources.map((source: unknown) => {
       if (!record(source) || !text(source.label) || !text(source.url) || !date(source.observedAt)) throw new Error('Invalid source');
       let url: URL;
@@ -48,8 +48,8 @@ export async function pollCheck(initial: CheckResult, endpoint: string, request:
     await wait(2000);
     const response = await request(new URL(`checks/${encodeURIComponent(initial.checkId)}`,api).href,{method:'GET',credentials:'omit',redirect:'error'});
     const result = await receive(response);
+    if ('checkId' in result && result.checkId !== initial.checkId) throw new Error('Invalid check status identity');
     if (result.status !== 'checking') return result;
-    if (result.checkId !== initial.checkId) throw new Error('Invalid check status identity');
   }
   throw new Error('Status polling timed out; try checking again later');
 }
