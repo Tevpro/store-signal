@@ -1,3 +1,12 @@
+export { HOSTED_TENANT_RULES } from './v1/hosted-tenant-rules.ts';
+export { normalizeStoreIdentity } from './v1/normalize-store-identity.ts';
+export { parseV1, serializeV1, parseAssessmentWithEvidence } from './v1/parse-records.ts';
+export type { StoreIdentity } from './types/store-identity.ts';
+export type { Evidence } from './types/evidence.ts';
+export type { Coverage } from './types/coverage.ts';
+export type { Assessment } from './types/assessment.ts';
+export type { HostedTenantRule } from './types/hosted-tenant-rule.ts';
+export type { V1Records } from './types/records.ts';
 export interface StoreFixture {
   readonly id: string;
   readonly origin: string;
