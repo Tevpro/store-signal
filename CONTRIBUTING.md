@@ -1,6 +1,6 @@
 # Contributing to StoreSignal
 
-Start with [AGENTS.md](AGENTS.md), [requirements](docs/requirements.md), [architecture](docs/architecture.md), and [coding standards](docs/coding-standards.md). Work on a claimed GitHub issue linked to its Plane card; submit a scoped PR against `main` with actual validation, privacy/security implications, and rollback. Never submit credentials, customer data, screenshots, unlicensed review corpora, or opaque AI-verdict fixtures.
+Start with [AGENTS.md](AGENTS.md), [requirements](docs/requirements.md), [architecture](docs/architecture.md), and [coding standards](docs/coding-standards.md). Put reusable/nontrivial models, types and schemas in separate descriptively named files; name implementation files for the behavior they contain rather than only the API version (`v1/` may be a folder). Simple one-off output types may remain local. Choose an unclaimed GitHub issue; link the matching Plane card for internal work. Discuss contract changes before implementation. Use one scoped PR targeting main and include actual test output, security/privacy considerations, and rollback. No screenshots, customer data, account keys, unlicensed copied review corpora or opaque AI verdict fixtures.
 
 ## License and contribution rights
 
