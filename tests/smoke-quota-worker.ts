@@ -44,5 +44,29 @@ try{
  const anonymous=await Promise.all(Array.from({length:21},(_,i)=>call<{allowed:boolean}>('/quota-take',{bucket:'new',now:time+180_000,anonymousInstall:i})));
  assert.equal(anonymous.filter(x=>x.allowed).length,20);
  assert.equal(anonymous.filter(x=>!x.allowed).length,1);
- console.log('Wrangler-local D1 quota passed: 12 barrier-synchronized distinct stores, 40 concurrent cached hits, rotating-install edge backstop, restart, rolling boundary, status/AI isolation, forged scope ignored');
+ const skew=time+86400_000;
+ await call('/arm',{});
+ const earlier=call<{kind:string;bucket?:string;retryAfterMs?:number}>('/quota-check',{id:'skew-earlier',name:'skew-earlier',now:skew});
+ let held=0;for(let i=0;i<100;i++){held=(await call<{waiting:number}>('/waiting')).waiting;if(held===1)break;await delay(50);}
+ assert.equal(held,1,'earlier request reached HTTP barrier');
+ for(let i=0;i<5;i++) assert.equal((await call<{kind:string}>('/quota-check-unheld',{id:`skew-later-${i}`,name:`skew-later-${i}`,now:skew+1})).kind,'admitted');
+ await call('/release',{});
+ assert.deepEqual(await earlier,{kind:'rate_limited',bucket:'new',retryAfterMs:60_001});
+ const skewState=await call<{jobs:unknown[];events:{scope:string;bucket:string}[]}>('/quota-state');
+ assert.equal(skewState.jobs.length,12);
+ for(const [bucket,limit] of [['cached',30],['status',60],['ai',2]] as const){
+  for(let i=0;i<limit;i++) assert.equal((await call<{allowed:boolean}>('/quota-take',{bucket,now:skew+120_001})).allowed,true);
+  assert.deepEqual(await call('/quota-take',{bucket,now:skew+120_000}),{allowed:false,retryAfterMs:60_001});
+ }
+ for(let i=0;i<20;i++) assert.equal((await call<{allowed:boolean}>('/quota-take',{bucket:'new',now:skew+240_001,anonymousInstall:i})).allowed,true);
+ assert.deepEqual(await call('/quota-take',{bucket:'new',now:skew+240_000,anonymousInstall:20}),{allowed:false,retryAfterMs:60_001});
+ const fractional=time+2*86400_000;
+ assert.equal((await call<{kind:string}>('/quota-check',{id:'fractional-job',name:'fractional',now:fractional})).kind,'admitted');
+ assert.deepEqual(await call('/quota-complete',{id:'fractional-job',name:'fractional',at:fractional,now:fractional+1,secondsExpiry:true}),{completed:true});
+ const expiry=new Date(fractional+7*86400_000).toISOString();
+ assert.equal((await call<{expiry:string}>('/quota-expiry?id=fractional-job')).expiry,expiry);
+ await call('/quota-prune',{now:new Date(fractional+7*86400_000+500).toISOString()});
+ assert.equal((await call<{expiry:string|null}>('/quota-expiry?id=fractional-job')).expiry,null);
+ assert.equal((await call<{jobs:{id:string}[]}>('/quota-state')).jobs.some(job=>job.id==='fractional-job'),false);
+ console.log('Wrangler-local D1 quota passed: equal-time races, delayed-earlier new/cached/status/AI and edge limits, restart, fractional expiry prune, bucket isolation');
 }finally{await stop();rmSync(dir,{recursive:true,force:true});}

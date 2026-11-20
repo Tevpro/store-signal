@@ -17,11 +17,13 @@ export function createQuotas(port: SqlPort) {
       validate(scope,now);
       if (!Object.hasOwn(limits,bucket)) throw new Error('Invalid quota bucket');
       const ticket=crypto.randomUUID();
+      // A delayed request may resume after a later-timestamped reservation commits.
+      // Count future events too; ignoring them lets an old request exceed the cap.
       const write=(key:string,limit:number,require?:string):Statement=>({
         sql:`INSERT INTO quota_events(id,scope,bucket,at_ms)
-          SELECT ?,?,?,? WHERE (SELECT count(*) FROM quota_events WHERE scope=? AND bucket=? AND at_ms>? AND at_ms<=?)<?
+          SELECT ?,?,?,? WHERE (SELECT count(*) FROM quota_events WHERE scope=? AND bucket=? AND at_ms>?)<?
           ${require ? 'AND EXISTS (SELECT 1 FROM quota_events WHERE id=? AND scope=? AND bucket=?)' : ''}`,
-        params:[ticket,key,bucket,now,key,bucket,now-MINUTE,now,limit,...(require?[ticket,require,bucket]:[])],
+        params:[ticket,key,bucket,now,key,bucket,now-MINUTE,limit,...(require?[ticket,require,bucket]:[])],
       });
       const writes:Statement[]=[write(scope.principal,limits[bucket].principal)];
       if(scope.edge) {
@@ -34,7 +36,7 @@ export function createQuotas(port: SqlPort) {
       const keys=[scope.principal,...(scope.edge?[scope.edge]:[])];
       let retryAfterMs=1;
       for(const key of keys) {
-        const row=await port.query('SELECT min(at_ms) AS oldest,count(*) AS total FROM quota_events WHERE scope=? AND bucket=? AND at_ms>? AND at_ms<=?',[key,bucket,now-MINUTE,now]);
+        const row=await port.query('SELECT min(at_ms) AS oldest,count(*) AS total FROM quota_events WHERE scope=? AND bucket=? AND at_ms>?',[key,bucket,now-MINUTE]);
         const max=key===scope.edge?limits[bucket].edge:limits[bucket].principal;
         if(Number(row[0]?.total)>=max) retryAfterMs=Math.max(retryAfterMs,Number(row[0]?.oldest)+MINUTE-now);
       }

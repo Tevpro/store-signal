@@ -110,7 +110,7 @@ export function createAdmission(port: SqlPort) {
         {sql: "UPDATE investigation_jobs SET state='complete',payload=json_set(payload,'$.state','complete') WHERE id=? AND state='checking' AND generation=? AND lease_until_ms>? AND store_id=?", params: [key, generation, now, result.storeId]},
         {sql: `INSERT INTO assessments(job_id,id,store_id,expires_at,payload)
           SELECT ?,?,?,?,? WHERE EXISTS (SELECT 1 FROM investigation_jobs WHERE id=? AND state='complete' AND generation=? AND lease_until_ms>? AND store_id=?)
-          AND NOT EXISTS (SELECT 1 FROM assessments WHERE job_id=?)`, params: [key, result.id, result.storeId, result.expiresAt, JSON.stringify(sanitized), key, generation, now, result.storeId, key]},
+          AND NOT EXISTS (SELECT 1 FROM assessments WHERE job_id=?)`, params: [key, result.id, result.storeId, new Date(result.expiresAt).toISOString(), JSON.stringify(sanitized), key, generation, now, result.storeId, key]},
       ]);
       const [written] = await port.query("SELECT a.id FROM assessments a JOIN investigation_jobs j ON j.id=a.job_id WHERE a.job_id=? AND a.id=? AND j.generation=? AND j.state='complete'", [key, result.id, generation]);
       return !!written;
